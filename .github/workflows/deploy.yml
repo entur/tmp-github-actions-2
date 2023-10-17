@@ -56,7 +56,7 @@ jobs:
     if:  ${{ inputs.print_envs }} 
     steps:    
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v1
         with:
           fetch-depth: 0
       - uses: ./.github/workflows/deploy-to-env.yml
