@@ -63,7 +63,8 @@ jobs:
         with:
           env: ${{ matrix.environment }}
 
-  deploy-stuff:
+  deploy-dev:
+    name: Deploy to dev
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
@@ -73,3 +74,27 @@ jobs:
       - name: Do something
         run: cat asdf.txt
     needs: [print-envs]
+
+  deploy-tst:
+      name: Deploy to tst
+      runs-on: ubuntu-22.04
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - name: Do something
+          run: cat asdf.txt
+      needs: [print-envs]
+
+  deploy-prd:
+      name: Deploy to prd
+      runs-on: ubuntu-22.04
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - name: Do something
+          run: cat asdf.txt
+      needs: [print-envs]

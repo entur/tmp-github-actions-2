@@ -12,9 +12,6 @@ runs:
   using: 'composite'
   # runs-on: ubuntu-latest
   steps:
-    # - name: Terraform Plan
-    #   shell: bash
-    #   run: echo The environment is dead
     - name: Terraform Plan
       shell: bash
       run: echo The environment is ${{ inputs.env }} 
