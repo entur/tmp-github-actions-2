@@ -12,9 +12,10 @@ on:
           - info
           - warning
           - debug
-      print_tags:
+      print_envs:
         description: 'True to print to STDOUT'
         required: true
+        default: true
         type: boolean
       tags:
         description: 'Test scenario tags'
@@ -26,12 +27,15 @@ on:
         required: true
 
 jobs:
-  print-tag:
+  print-envs:
+    strategy:
+      matrix:
+        environment: ${{ inputs.environment }} 
     runs-on: ubuntu-latest
-    if:  ${{ inputs.print_tags }} 
+    if:  ${{ inputs.print_envs }} 
     steps:
-      - name: Print the input tag to STDOUT
-        run: echo  The tags are ${{ inputs.tags }} 
+      - name: Print the environment to STDOUT
+        run: echo The environment is ${{ matrix.environment }} 
 
   deploy-stuff:
     runs-on: ubuntu-22.04
@@ -42,3 +46,4 @@ jobs:
           fetch-depth: 0
       - name: Do something
         run: cat asdf.txt
+    needs: [print-envs]
