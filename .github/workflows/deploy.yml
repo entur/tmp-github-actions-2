@@ -40,7 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     if:  ${{ inputs.print_envs }} 
     steps:
-      - name: Print the environment to STDOUT
+      - name: Terraform Plan
+        run: echo The environment is ${{ matrix.environment }} 
+      - name: Terraform Apply
+        run: echo The environment is ${{ matrix.environment }} 
+      - name: Deploy to runtime
         run: echo The environment is ${{ matrix.environment }} 
 
   deploy-stuff:
