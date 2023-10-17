@@ -30,7 +30,7 @@ jobs:
   print-envs:
     strategy:
       matrix:
-        environment: ${{ inputs.environment }} 
+        environment: ${{ inputs.logLevel }} 
     runs-on: ubuntu-latest
     if:  ${{ inputs.print_envs }} 
     steps:
