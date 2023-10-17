@@ -18,20 +18,20 @@ on:
         default: true
         type: boolean
       deploy-to-dev:
-          description: 'Deploy to dev'
-          required: true
-          default: true
-          type: boolean
+        description: 'Deploy to dev'
+        required: true
+        default: true
+        type: boolean
       deploy-to-tst:
-            description: 'Deploy to tst'
-            required: true
-            default: true
-            type: boolean
+        description: 'Deploy to tst'
+        required: true
+        default: true
+        type: boolean
       deploy-to-prd:
-              description: 'Deploy to prd'
-              required: true
-              default: true
-              type: boolean
+        description: 'Deploy to prd'
+        required: true
+        default: true
+        type: boolean
       # tags:
       #   description: 'Test scenario tags'
       #   required: true
@@ -54,13 +54,10 @@ jobs:
         environment: ${{ fromJson(inputs.environments) }}
     runs-on: ubuntu-latest
     if:  ${{ inputs.print_envs }} 
-    steps:
-      - name: Terraform Plan
-        run: echo The environment is ${{ matrix.environment }} 
-      - name: Terraform Apply
-        run: echo The environment is ${{ matrix.environment }} 
-      - name: Deploy to runtime
-        run: echo The environment is ${{ matrix.environment }} 
+    steps:    
+      - uses: ./_deploy-to-env.yml
+        with:
+          environment: ${{ matrix.environment }}
 
   deploy-stuff:
     runs-on: ubuntu-22.04

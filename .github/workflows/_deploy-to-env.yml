@@ -1,0 +1,20 @@
+name: deploy-to-env
+
+on:
+    workflow_call:
+        inputs:
+            environment:
+                required: false
+                type: string
+                default: release
+
+jobs:
+  deploy-to-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Terraform Plan
+        run: echo The environment is ${{ inputs.environment }} 
+      - name: Terraform Apply
+        run: echo The environment is ${{ inputs.environment }} 
+      - name: Deploy to runtime
+        run: echo The environment is ${{ inputs.environment }} 
