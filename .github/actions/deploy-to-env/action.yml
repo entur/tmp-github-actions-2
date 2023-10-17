@@ -12,12 +12,15 @@ runs:
   using: 'composite'
   # runs-on: ubuntu-latest
   steps:
+    # - name: Terraform Plan
+    #   shell: bash
+    #   run: echo The environment is dead
     - name: Terraform Plan
       shell: bash
-      run: echo The environment is dead
-    # - name: Terraform Plan
-    #   run: echo The environment is ${{ inputs.env }} 
-    # - name: Terraform Apply
-    #   run: echo The environment is ${{ inputs.env }} 
-    # - name: Deploy to runtime
-    #   run: echo The environment is ${{ inputs.env }} 
+      run: echo The environment is ${{ inputs.env }} 
+    - name: Terraform Apply
+      shell: bash
+      run: echo The environment is ${{ inputs.env }} 
+    - name: Deploy to runtime
+      shell: bash
+      run: echo The environment is ${{ inputs.env }} 
