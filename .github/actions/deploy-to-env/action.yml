@@ -1,12 +1,12 @@
 name: deploy-to-env
 
-on:
-  workflow_call:
-    inputs:
-      env:
-        required: false
-        type: string
-        default: release
+# on:
+  # workflow_call:
+inputs:
+  env:
+    required: false
+    type: string
+    default: release
         
 runs:
   using: 'composite'
