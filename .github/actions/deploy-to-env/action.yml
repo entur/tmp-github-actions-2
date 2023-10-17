@@ -10,7 +10,7 @@ on:
         
 runs:
   using: 'composite'
-  runs-on: ubuntu-latest
+  # runs-on: ubuntu-latest
   steps:
     - name: Terraform Plan
       shell: bash
