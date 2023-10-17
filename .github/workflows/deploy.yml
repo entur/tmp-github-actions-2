@@ -28,14 +28,14 @@ on:
       environments:
         description: 'Environments?'
         type: string
-        default: "dev,prd"
+        default: '["dev", "prod"]'
         required: true
 
 jobs:
   print-envs:
     strategy:
       matrix:
-        environment: ${{ inputs.environments }}
+        environment: ${{ fromJson(inputs.environments) }}
     runs-on: ubuntu-latest
     if:  ${{ inputs.print_envs }} 
     steps:
