@@ -66,11 +66,16 @@ jobs:
   deploy-dev:
     name: Deploy to dev
     runs-on: ubuntu-22.04
+    if:  ${{ inputs.deploy-to-dev }} 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Terraform Apply
+        uses: ./.github/actions/deploy-to-env
+        with:
+          env: dev
       - name: Do something
         run: cat asdf.txt
     needs: [print-envs]
@@ -78,6 +83,7 @@ jobs:
   deploy-tst:
       name: Deploy to tst
       runs-on: ubuntu-22.04
+      if:  ${{ inputs.deploy-to-tst }} 
       steps:
         - name: Checkout repository
           uses: actions/checkout@v4
@@ -90,6 +96,7 @@ jobs:
   deploy-prd:
       name: Deploy to prd
       runs-on: ubuntu-22.04
+      if:  ${{ inputs.deploy-to-prd }} 
       steps:
         - name: Checkout repository
           uses: actions/checkout@v4
