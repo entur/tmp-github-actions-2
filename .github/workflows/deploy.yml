@@ -28,7 +28,7 @@ on:
       environments:
         description: 'Environments?'
         type: string
-        default: ["dev, "prd"]
+        default: '["dev, "prd"]'
         required: true
 
 jobs:
