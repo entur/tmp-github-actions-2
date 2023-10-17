@@ -17,6 +17,21 @@ on:
         required: true
         default: true
         type: boolean
+      deploy-to-dev:
+          description: 'Deploy to dev'
+          required: true
+          default: true
+          type: boolean
+      deploy-to-tst:
+            description: 'Deploy to tst'
+            required: true
+            default: true
+            type: boolean
+      deploy-to-prd:
+              description: 'Deploy to prd'
+              required: true
+              default: true
+              type: boolean
       # tags:
       #   description: 'Test scenario tags'
       #   required: true
