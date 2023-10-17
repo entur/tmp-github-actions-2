@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: ./.github/workflows/_deploy-to-env.yml
+      - uses: ./.github/workflows/deploy-to-env.yml
         with:
           environment: ${{ matrix.environment }}
 
