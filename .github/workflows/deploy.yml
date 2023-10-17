@@ -61,7 +61,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/deploy-to-env
         with:
-          environment: ${{ matrix.environment }}
+          env: ${{ matrix.environment }}
 
   deploy-stuff:
     runs-on: ubuntu-22.04
