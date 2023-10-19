@@ -116,6 +116,8 @@ jobs:
           with:
             tag-name: current-tst
             tag-message: The current tst release is based on this commit
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       needs: [deploy-dev]
 
   deploy-prd:
@@ -135,4 +137,6 @@ jobs:
           with:
             tag-name: current-prd
             tag-message: The current prd release is based on this commit
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       needs: [deploy-tst]
