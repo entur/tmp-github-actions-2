@@ -81,7 +81,8 @@ jobs:
       #       to: HEAD
       - name: Print diff
         id: print-diff-dev
-        run: echo "diff=$(git log current-dev..HEAD --first-parent --pretty=format:'%h %ad%x09%an%x09%s' --date=short)\n" >> $GITHUB_OUTPUT
+        # run: echo "diff=$(git log current-dev..HEAD --first-parent)\n" >> $GITHUB_OUTPUT
+        run: echo -e "diff<<EOF\n$(git log current-dev..HEAD --first-parent)\nEOF" >> $GITHUB_OUTPUT
       - name: Terraform Apply
         uses: ./.github/actions/deploy-to-env
         with:
@@ -116,7 +117,7 @@ jobs:
         - name: Print diff
           id: print-diff-tst
           # run: git log current-tst..HEAD --first-parent >> $GITHUB_OUTPUT
-          run: echo "diff=$(git log current-tst..HEAD --first-parent --pretty=format:'%h %ad%x09%an%x09%s' --date=short)\n" >> $GITHUB_OUTPUT
+          run: echo -e "diff<<EOF\n$(git log current-tst..HEAD --first-parent)\nEOF" >> $GITHUB_OUTPUT
         - uses: trstringer/manual-approval@v1
           timeout-minutes: 1
           with:
@@ -157,7 +158,7 @@ jobs:
       #       to: HEAD
         - name: Print diff
           id: print-diff-prd
-          run: echo "diff=$(git log current-prd..HEAD --first-parent --pretty=format:'%h %ad%x09%an%x09%s' --date=short)\n" >> $GITHUB_OUTPUT
+          run: echo -e "diff<<EOF\n$(git log current-prd..HEAD --first-parent)\nEOF" >> $GITHUB_OUTPUT
         - name: Do something
           run: cat asdf.txt
         - name: Set Git tag
