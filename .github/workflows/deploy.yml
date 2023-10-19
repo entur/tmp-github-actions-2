@@ -125,7 +125,7 @@ jobs:
             approvers: sindrel,bvestli
             minimum-approvals: 1
             issue-title: "🥇 Approve deployment to tst"
-            issue-body: "Please approve or deny the deployment to tst ${{ steps.print-diff-tst.outputs.diff }}"
+            issue-body: "Please approve or deny the deployment to tst\n\n${{ steps.print-diff-tst.outputs.diff }}"
             exclude-workflow-initiator-as-approver: false
             additional-approved-words: '👍,ja,supert,konge,sjef'
             additional-denied-words: '👎,nei,æsj,stopp,avbryt'
