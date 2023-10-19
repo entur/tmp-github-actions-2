@@ -73,6 +73,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Diff
+        id: diff
+        uses: yanamura/git-merge-diff@v1
+        with:
+            from: current-dev
+            to: HEAD
       - name: Terraform Apply
         uses: ./.github/actions/deploy-to-env
         with:
@@ -94,6 +100,12 @@ jobs:
       runs-on: ubuntu-22.04
       if:  ${{ inputs.deploy-to-tst }} 
       steps:
+        - name: Diff
+          id: diff
+          uses: yanamura/git-merge-diff@v1
+          with:
+              from: current-tst
+              to: HEAD
         - uses: trstringer/manual-approval@v1
           timeout-minutes: 1
           with:
@@ -126,6 +138,12 @@ jobs:
       runs-on: ubuntu-22.04
       if:  ${{ inputs.deploy-to-prd }} 
       steps:
+        - name: Diff
+          id: diff
+          uses: yanamura/git-merge-diff@v1
+          with:
+              from: current-prd
+              to: HEAD
         - name: Checkout repository
           uses: actions/checkout@v4
           with:
