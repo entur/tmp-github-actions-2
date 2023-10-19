@@ -79,6 +79,13 @@ jobs:
           env: dev
       - name: Do something
         run: cat asdf.txt
+      - name: Set Git tag
+        uses: weareyipyip/walking-tag-action@v1
+        with:
+          tag-name: current-dev
+          tag-message: The current dev release is based on this commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # needs: [print-envs]
 
   deploy-tst:
@@ -104,6 +111,11 @@ jobs:
             fetch-depth: 0
         - name: Do something
           run: cat asdf.txt
+        - name: Set Git tag
+          uses: weareyipyip/walking-tag-action@v1
+          with:
+            tag-name: current-tst
+            tag-message: The current tst release is based on this commit
       needs: [deploy-dev]
 
   deploy-prd:
@@ -118,4 +130,9 @@ jobs:
             fetch-depth: 0
         - name: Do something
           run: cat asdf.txt
+        - name: Set Git tag
+          uses: weareyipyip/walking-tag-action@v1
+          with:
+            tag-name: current-prd
+            tag-message: The current prd release is based on this commit
       needs: [deploy-tst]
