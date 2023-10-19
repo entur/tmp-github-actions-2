@@ -100,6 +100,10 @@ jobs:
       runs-on: ubuntu-22.04
       if:  ${{ inputs.deploy-to-tst }} 
       steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
         - name: Diff
           id: diff
           uses: yanamura/git-merge-diff@v1
@@ -117,10 +121,6 @@ jobs:
             exclude-workflow-initiator-as-approver: false
             additional-approved-words: '👍,ja,supert,konge,sjef'
             additional-denied-words: '👎,nei,æsj,stopp,avbryt'
-        - name: Checkout repository
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
         - name: Do something!
           run: cat asdf.txt
         - name: Set Git tag
@@ -138,16 +138,16 @@ jobs:
       runs-on: ubuntu-22.04
       if:  ${{ inputs.deploy-to-prd }} 
       steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
         - name: Diff
           id: diff
           uses: yanamura/git-merge-diff@v1
           with:
               from: current-prd
               to: HEAD
-        - name: Checkout repository
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
         - name: Do something
           run: cat asdf.txt
         - name: Set Git tag
