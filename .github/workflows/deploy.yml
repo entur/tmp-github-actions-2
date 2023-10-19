@@ -86,6 +86,7 @@ jobs:
       if:  ${{ inputs.deploy-to-tst }} 
       steps:
         - uses: trstringer/manual-approval@v1
+          timeout-minutes: 1
           with:
             secret: ${{ github.TOKEN }}
             approvers: sindrel,bvestli
