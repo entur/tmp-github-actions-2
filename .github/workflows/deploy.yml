@@ -80,7 +80,8 @@ jobs:
       #       from: current-dev
       #       to: HEAD
       - name: Print diff
-        run: git log current-dev..HEAD --first-parent --reverse
+        id: print-diff-dev
+        run: diff=$(git log current-dev..HEAD --first-parent)\n" >> $GITHUB_OUTPUT
       - name: Terraform Apply
         uses: ./.github/actions/deploy-to-env
         with:
@@ -113,7 +114,9 @@ jobs:
       #       from: current-dev
       #       to: HEAD
         - name: Print diff
-          run: git log current-tst..HEAD --first-parent --reverse
+          id: print-diff-tst
+          # run: git log current-tst..HEAD --first-parent >> $GITHUB_OUTPUT
+          run: diff=$(git log current-tst..HEAD --first-parent)\n" >> $GITHUB_OUTPUT
         - uses: trstringer/manual-approval@v1
           timeout-minutes: 1
           with:
@@ -121,7 +124,7 @@ jobs:
             approvers: sindrel,bvestli
             minimum-approvals: 1
             issue-title: "🥇 Approve deployment to tst"
-            issue-body: "Please approve or deny the deployment to tst"
+            issue-body: "Please approve or deny the deployment to tst ${{ steps.print-diff-tst.outputs.diff }}"
             exclude-workflow-initiator-as-approver: false
             additional-approved-words: '👍,ja,supert,konge,sjef'
             additional-denied-words: '👎,nei,æsj,stopp,avbryt'
@@ -153,7 +156,8 @@ jobs:
       #       from: current-dev
       #       to: HEAD
         - name: Print diff
-          run: git log current-prd..HEAD --first-parent --reverse
+          id: print-diff-prd
+          run: diff=$(git log current-prd..HEAD --first-parent)\n" >> $GITHUB_OUTPUT
         - name: Do something
           run: cat asdf.txt
         - name: Set Git tag
