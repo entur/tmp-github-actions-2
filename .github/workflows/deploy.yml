@@ -73,15 +73,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      # - name: Diff
-      #   id: diff-dev
-      #   uses: yanamura/git-merge-diff@v1
-      #   with:
-      #       from: current-dev
-      #       to: HEAD
       - name: Print diff
         id: print-diff-dev
-        # run: echo "diff=$(git log current-dev..HEAD --first-parent)\n" >> $GITHUB_OUTPUT
         run: echo -e "diff<<EOF\n$(git log current-dev..HEAD --pretty=format:"%h%x09%an%x09%ad%x09%s" --date=short)\nEOF" >> $GITHUB_OUTPUT
       - name: Terraform Apply
         uses: ./.github/actions/deploy-to-env
@@ -108,15 +101,8 @@ jobs:
           uses: actions/checkout@v4
           with:
             fetch-depth: 0
-      # - name: Diff
-      #   id: diff-dev
-      #   uses: yanamura/git-merge-diff@v1
-      #   with:
-      #       from: current-dev
-      #       to: HEAD
         - name: Print diff
           id: print-diff-tst
-          # run: git log current-tst..HEAD --first-parent >> $GITHUB_OUTPUT
           run: echo -e "diff<<EOF\n$(git log current-tst..HEAD --pretty=format:"%h%x09%an%x09%ad%x09%s" --date=short)\nEOF" >> $GITHUB_OUTPUT
         - uses: trstringer/manual-approval@v1
           timeout-minutes: 1
@@ -125,7 +111,7 @@ jobs:
             approvers: sindrel,bvestli
             minimum-approvals: 1
             issue-title: "🥇 Approve deployment to tst"
-            issue-body: "Please approve or deny the deployment to tst\n\n${{ steps.print-diff-tst.outputs.diff }}"
+            issue-body: "Please approve or deny the deployment to tst 🙏\n\n**Git changes:**\n${{ steps.print-diff-tst.outputs.diff }}"
             exclude-workflow-initiator-as-approver: false
             additional-approved-words: '👍,ja,supert,konge,sjef'
             additional-denied-words: '👎,nei,æsj,stopp,avbryt'
@@ -150,12 +136,6 @@ jobs:
           uses: actions/checkout@v4
           with:
             fetch-depth: 0
-      # - name: Diff
-      #   id: diff-dev
-      #   uses: yanamura/git-merge-diff@v1
-      #   with:
-      #       from: current-dev
-      #       to: HEAD
         - name: Print diff
           id: print-diff-prd
           run: echo -e "diff<<EOF\n$(git log current-prd..HEAD --pretty=format:"%h%x09%an%x09%ad%x09%s" --date=short)\nEOF" >> $GITHUB_OUTPUT
