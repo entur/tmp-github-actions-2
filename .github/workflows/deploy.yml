@@ -79,6 +79,8 @@ jobs:
         with:
             from: current-dev
             to: HEAD
+      - name: Print diff
+        run: echo "${{ steps.diff.outputs.diff }}"
       - name: Terraform Apply
         uses: ./.github/actions/deploy-to-env
         with:
@@ -110,6 +112,8 @@ jobs:
           with:
               from: current-tst
               to: HEAD
+        - name: Print diff
+          run: echo "${{ steps.diff.outputs.diff }}"
         - uses: trstringer/manual-approval@v1
           timeout-minutes: 1
           with:
@@ -148,6 +152,8 @@ jobs:
           with:
               from: current-prd
               to: HEAD
+        - name: Print diff
+          run: echo "${{ steps.diff.outputs.diff }}"
         - name: Do something
           run: cat asdf.txt
         - name: Set Git tag
