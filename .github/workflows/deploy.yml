@@ -85,7 +85,7 @@ jobs:
         uses: ./.github/actions/deploy-to-env
         with:
           env: dev
-      - name: Do something
+      - name: Do something?
         run: cat asdf.txt
       - name: Set Git tag
         uses: weareyipyip/walking-tag-action@v2
