@@ -80,7 +80,7 @@ jobs:
       - name: Do something
         run: cat asdf.txt
       - name: Set Git tag
-        uses: weareyipyip/walking-tag-action@v1
+        uses: weareyipyip/walking-tag-action@v2
         with:
           tag-name: current-dev
           tag-message: The current dev release is based on this commit
@@ -112,7 +112,7 @@ jobs:
         - name: Do something
           run: cat asdf.txt
         - name: Set Git tag
-          uses: weareyipyip/walking-tag-action@v1
+          uses: weareyipyip/walking-tag-action@v2
           with:
             tag-name: current-tst
             tag-message: The current tst release is based on this commit
@@ -131,7 +131,7 @@ jobs:
         - name: Do something
           run: cat asdf.txt
         - name: Set Git tag
-          uses: weareyipyip/walking-tag-action@v1
+          uses: weareyipyip/walking-tag-action@v2
           with:
             tag-name: current-prd
             tag-message: The current prd release is based on this commit
