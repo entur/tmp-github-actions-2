@@ -106,6 +106,7 @@ jobs:
 
   deploy-prd:
       name: Deploy to prd
+      environment: prd
       runs-on: ubuntu-22.04
       if:  ${{ inputs.deploy-to-prd }} 
       steps:
