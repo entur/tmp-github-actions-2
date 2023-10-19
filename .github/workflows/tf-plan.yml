@@ -2,6 +2,12 @@ name: Terraform Plan
 
 on:
   workflow_dispatch:
+    inputs:
+      environments:
+        description: 'Environments?'
+        type: string
+        default: '["dev", "prd"]'
+        required: true
   pull_request:
 
 env:
