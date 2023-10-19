@@ -90,11 +90,11 @@ jobs:
             secret: ${{ github.TOKEN }}
             approvers: sindrel,bvestli
             minimum-approvals: 1
-            issue-title: "Approve deployment to tst"
-            issue-body: "Please approve or deny the deployment to deployment tst"
+            issue-title: "🥇 Approve deployment to tst"
+            issue-body: "Please approve or deny the deployment to tst"
             exclude-workflow-initiator-as-approver: false
-            additional-approved-words: 'ja,supert,konge,sjef'
-            additional-denied-words: 'nei,æsj,stopp,avbryt'
+            additional-approved-words: '👍,ja,supert,konge,sjef'
+            additional-denied-words: '👎,nei,æsj,stopp,avbryt'
         - name: Checkout repository
           uses: actions/checkout@v4
           with:
