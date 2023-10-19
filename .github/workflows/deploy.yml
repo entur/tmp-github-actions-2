@@ -73,14 +73,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Diff
-        id: diff-dev
-        uses: yanamura/git-merge-diff@v1
-        with:
-            from: current-dev
-            to: HEAD
+      # - name: Diff
+      #   id: diff-dev
+      #   uses: yanamura/git-merge-diff@v1
+      #   with:
+      #       from: current-dev
+      #       to: HEAD
       - name: Print diff
-        run: echo "${{ steps.diff-dev.outputs.diff }}"
+        run: git log current-dev..HEAD --first-parent --reverse
       - name: Terraform Apply
         uses: ./.github/actions/deploy-to-env
         with:
@@ -106,14 +106,14 @@ jobs:
           uses: actions/checkout@v4
           with:
             fetch-depth: 0
-        - name: Diff
-          id: diff-tst
-          uses: yanamura/git-merge-diff@v1
-          with:
-              from: current-tst
-              to: HEAD
+      # - name: Diff
+      #   id: diff-dev
+      #   uses: yanamura/git-merge-diff@v1
+      #   with:
+      #       from: current-dev
+      #       to: HEAD
         - name: Print diff
-          run: echo "${{ steps.diff-tst.outputs.diff }}"
+          run: git log current-tst..HEAD --first-parent --reverse
         - uses: trstringer/manual-approval@v1
           timeout-minutes: 1
           with:
@@ -146,14 +146,14 @@ jobs:
           uses: actions/checkout@v4
           with:
             fetch-depth: 0
-        - name: Diff
-          id: diff-prd
-          uses: yanamura/git-merge-diff@v1
-          with:
-              from: current-prd
-              to: HEAD
+      # - name: Diff
+      #   id: diff-dev
+      #   uses: yanamura/git-merge-diff@v1
+      #   with:
+      #       from: current-dev
+      #       to: HEAD
         - name: Print diff
-          run: echo "${{ steps.diff-prd.outputs.diff }}"
+          run: git log current-prd..HEAD --first-parent --reverse
         - name: Do something
           run: cat asdf.txt
         - name: Set Git tag
