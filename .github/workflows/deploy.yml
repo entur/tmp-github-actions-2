@@ -47,21 +47,21 @@ on:
         required: true
 
 jobs:
-  print-envs:
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ${{ fromJson(inputs.environments) }}
-    runs-on: ubuntu-latest
-    if:  ${{ inputs.print_envs }} 
-    steps:    
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: ./.github/actions/deploy-to-env
-        with:
-          env: ${{ matrix.environment }}
+  # print-envs:
+  #   strategy:
+  #     max-parallel: 1
+  #     matrix:
+  #       environment: ${{ fromJson(inputs.environments) }}
+  #   runs-on: ubuntu-latest
+  #   if:  ${{ inputs.print_envs }} 
+  #   steps:    
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: ./.github/actions/deploy-to-env
+  #       with:
+  #         env: ${{ matrix.environment }}
 
   deploy-dev:
     name: Deploy to dev
@@ -78,7 +78,7 @@ jobs:
           env: dev
       - name: Do something
         run: cat asdf.txt
-    needs: [print-envs]
+    # needs: [print-envs]
 
   deploy-tst:
       name: Deploy to tst
