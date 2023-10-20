@@ -35,4 +35,4 @@ jobs:
           #workload_identity_provider: ${{ secrets.GOOGLE_CREDENTIALS }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
-          environment: ${{ jobs.terraform-apply.environment }}
+          environment: ${{ terraform_plan.environment }}
