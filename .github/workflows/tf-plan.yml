@@ -2,6 +2,7 @@ name: Terraform Plan
 
 on:
   pull_request:
+    paths: ['terraform/**']
 
 env:
   #TF_SA: <GOOGLE_SA_EMAIL>

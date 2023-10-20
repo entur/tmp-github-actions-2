@@ -3,6 +3,7 @@ name: Terraform Apply
 on:
   pull_request_review:
     types: [submitted]
+    paths: ['terraform/**']
 
 env:
   #TF_SA: <GOOGLE_SA_EMAIL>
