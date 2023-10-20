@@ -5,8 +5,10 @@ on:
     inputs:
       environments:
         description: 'Environments?'
-        type: string
-        default: '["dev", "prd"]'
+        type: choice
+        options:
+          - dev
+          - prd
         required: true
   pull_request:
 
@@ -40,3 +42,4 @@ jobs:
           #workload_identity_provider: ${{ secrets.GOOGLE_CREDENTIALS }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
+          environment: ${{ inputs.environments }}
