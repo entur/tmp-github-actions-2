@@ -59,7 +59,7 @@ runs:
       shell: bash
       run: |
         echo 'plan<<EOF' >> $GITHUB_OUTPUT
-        terraform plan --var-file=env/${{ inputs.environment }} -no-color -out=tfplan >> $GITHUB_OUTPUT
+        terraform plan --var-file=env/${{ inputs.environment }}.tfvars -no-color -out=tfplan >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
     - name: Save Artifact
