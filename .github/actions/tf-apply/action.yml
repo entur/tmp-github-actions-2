@@ -1,15 +1,15 @@
-name: 'Terraform setup and plan'
-description: 'Setup Terraform and creates plan'
+name: "Terraform setup and apply"
+description: "Applys a terraform plan file from an artifact"
 inputs:
   terraform_directory:
-    description: 'Directory that holds Terraform code'
+    description: 'where to execute terraform'
     required: true
   terraform_version:
-    description: 'Terraform Version'
+    description: 'GCP Terraform Version'
     required: true
     default: 1.5.7
   github_token:
-    description: 'GitHub token for auth'
+    description: 'github secret'
     required: true
   workload_identity_provider:
     description: 'Workload identity provider name'
@@ -19,9 +19,6 @@ inputs:
     required: false
   pr_id:
     description: 'Pull request ID'
-    required: true
-  environment:
-    description: 'Environment'
     required: true
 
 runs:
@@ -33,12 +30,12 @@ runs:
         terraform_version: ${{ inputs.terraforom_version }}
         terraform_wrapper: false
 
-#    - id: 'auth'
-#      name: 'Authenticate to Google Cloud'
-#      uses: 'google-github-actions/auth@v1'
-#      with:
-#        workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
-#        service_account: ${{ secrets.SA_EMAIL }}
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        service_account: ${{ inputs.terraform_sa }}
+        credentials_json: ${{ inputs.google_sa_key }}
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0.6.0'
@@ -50,33 +47,34 @@ runs:
       run: |
         terraform init
 
-    - name: Terraform Plan
-      id: plan
+    - name: Download Plan
+      id: download-plan
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{ inputs.github_token }}
+        workflow: plan.yaml
+        pr: ${{ inputs.pr_id }}
+        name: ${{ inputs.pr_id }}-tf-plan
+        path: ${{ inputs.terraform_directory }}
+
+    - name: Terraform Apply
+      id: apply
       working-directory: ${{ inputs.terraform_directory }}
       shell: bash
       run: |
-        echo 'plan<<EOF' >> $GITHUB_OUTPUT
-        terraform plan --var-file=env/${{ inputs.environment }}.tfvars -no-color -out=tfplan >> $GITHUB_OUTPUT
+        echo 'apply<<EOF' >> $GITHUB_OUTPUT
+        terraform apply --var-file=env/${{ inputs.environment }}.tfvars -input=false -no-color tfplan >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
-    - name: Save Artifact
-      id: save-artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ inputs.pr_id }}-tf-plan
-        path: ${{ inputs.terraform_directory }}/tfplan
-
-    - name: Comment Plan
-      id: comment-plan
+    - name: Comment Apply
+      id: comment-apply
       uses: peter-evans/create-or-update-comment@v2
       with:
         token: ${{ inputs.github_token }}
         issue-number: ${{ inputs.pr_id }}
         body: |
-          Terraform Plan:
+          Terraform Apply:
 
           ```
-          ${{ steps.plan.outputs.plan }}
+          ${{ steps.apply.outputs.apply }}
           ```
-
-          Plan saved to GH artifacts.
