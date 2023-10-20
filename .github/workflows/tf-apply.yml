@@ -14,7 +14,7 @@ jobs:
   terraform_apply:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
-    environment: ${{ vars.ENVIRONMENT_STAGE }}
+    environment: dev
     steps:
       - uses: actions/checkout@v3
 
