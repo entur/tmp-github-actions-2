@@ -20,6 +20,9 @@ inputs:
   pr_id:
     description: 'Pull request ID'
     required: true
+  environment:
+    description: 'Environment'
+    required: true
 
 runs:
   using: "composite"
