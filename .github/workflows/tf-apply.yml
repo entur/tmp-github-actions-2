@@ -1,6 +1,8 @@
 name: Terraform Apply
 
 on:
+  workflow_call:
+    
   pull_request_review:
     types: [submitted]
     paths: ['terraform/**']
