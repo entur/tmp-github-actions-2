@@ -13,8 +13,13 @@ on:
       - edited
 
 jobs:
-  my-job:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: my-step
+      - name: my-lint-step
+        run: echo "Hello World!"
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: my-sast-step
         run: echo "Hello World!"
