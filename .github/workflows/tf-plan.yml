@@ -2,14 +2,14 @@ name: Terraform Plan
 
 on:
   workflow_call:
+    inputs:
+      tf_version:
+        required: false
+        type: string
+        default: 1.1.0
     
   pull_request:
     paths: ['terraform/**']
-
-env:
-  #TF_SA: <GOOGLE_SA_EMAIL>
-  TERRAFORM_VERSION: "1.5.7"
-  TF_IN_AUTOMATION: "True"
 
 jobs:
   terraform_plan:
@@ -33,7 +33,7 @@ jobs:
         with:
           #terraform_sa: ${{ env.TF_SA }}
           terraform_directory: "terraform"
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_version: ${{ inputs.tf_version }}
           #workload_identity_provider: ${{ secrets.GOOGLE_CREDENTIALS }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
