@@ -1,15 +1,16 @@
 name: "Terraform setup and apply"
 description: "Applys a terraform plan file from an artifact"
 inputs:
-  terraform_directory:
-    description: 'where to execute terraform'
+  tf_directory:
+    description: 'Directory that holds Terraform code'
     required: true
-  terraform_version:
-    description: 'GCP Terraform Version'
+    default: terraform
+  tf_version:
+    description: 'Terraform Version'
     required: true
     default: 1.5.7
   github_token:
-    description: 'github secret'
+    description: 'GitHub token for auth'
     required: true
   workload_identity_provider:
     description: 'Workload identity provider name'
@@ -23,6 +24,21 @@ inputs:
   environment:
     description: 'Environment'
     required: true
+  provider_name:
+    description: provider_name
+    required: true
+  sa_email:
+    description: sa_email
+    required: true
+  cluster_project_id:
+    description: cluster_project_id
+    required: true
+  cluster_name:
+    description: cluster_name
+    required: true
+  cluster_location:
+    description: cluster_location
+    required: true
 
 runs:
   using: "composite"
@@ -33,15 +49,19 @@ runs:
         terraform_version: ${{ inputs.terraforom_version }}
         terraform_wrapper: false
 
-#    - id: 'auth'
-#      name: 'Authenticate to Google Cloud'
-#      uses: 'google-github-actions/auth@v1'
-#      with:
-#        service_account: ${{ inputs.terraform_sa }}
-#        credentials_json: ${{ inputs.google_sa_key }}
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        service_account: ${{ inputs.terraform_sa }}
+        credentials_json: ${{ inputs.google_sa_key }}
 
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v0.6.0'
+    - id: 'get-credentials'
+      uses: 'google-github-actions/get-gke-credentials@v1'
+      with:
+        project_id: ${{ inputs.cluster_project_id }}
+        cluster_name: ${{ inputs.cluster_name }}
+        location: ${{ inputs.cluster_location }}
 
     - name: Terraform Init
       id: init
@@ -52,12 +72,10 @@ runs:
 
     - name: Download Plan
       id: download-plan
-      uses: dawidd6/action-download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
-        github_token: ${{ inputs.github_token }}
-        workflow: plan.yaml
         pr: ${{ inputs.pr_id }}
-        name: ${{ inputs.pr_id }}-tf-plan-${{ inputs.environment }}
+        name: ${{ inputs.pr_id }}-tf-plan
         path: ${{ inputs.terraform_directory }}
 
     - name: Terraform Apply
@@ -78,6 +96,6 @@ runs:
         body: |
           Terraform Apply for ${{ inputs.environment }}:
 
-          ```
+          ```tf
           ${{ steps.apply.outputs.apply }}
           ```

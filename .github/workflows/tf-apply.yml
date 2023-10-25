@@ -1,0 +1,48 @@
+name: Terraform apply
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        default: dev
+      tf_version:
+        required: false
+        type: string
+        default: '1.1.0'
+
+
+jobs:
+
+  terraform-apply:
+    name: Run Terraform apply
+    runs-on: ubuntu-latest
+
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get PR ID
+        id: pr-id
+        shell: bash
+        env:
+          GITHUB_REF: ${{ inputs.github_ref }}
+        run: |
+          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Terraform Apply
+        uses: ./.github/actions/tf-apply
+        with:
+          tf_directory: "terraform"
+          tf_version: ${{ inputs.tf_version }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
+          environment: ${{ inputs.environment }}
+          provider_name: ${{ secrets.PROVIDER_NAME }}
+          sa_email: ${{ secrets.SA_EMAIL }}
+          cluster_project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+          cluster_location: ${{ secrets.CLUSTER_LOCATION }}

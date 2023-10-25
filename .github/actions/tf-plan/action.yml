@@ -50,6 +50,7 @@ runs:
         terraform_wrapper: false
 
     - id: 'auth'
+      name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
         workload_identity_provider: ${{ inputs.provider_name }}
