@@ -97,7 +97,7 @@ runs:
         body: |
           Terraform Plan:
 
-          ```
+          ```tf
           ${{ steps.plan.outputs.plan }}
           ```
 
