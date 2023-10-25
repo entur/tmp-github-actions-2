@@ -4,7 +4,7 @@ inputs:
   terraform_directory:
     description: 'Directory that holds Terraform code'
     required: true
-  terraform_version:
+  tf_version:
     description: 'Terraform Version'
     required: true
     default: 1.5.7
@@ -30,7 +30,7 @@ runs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: ${{ inputs.terraforom_version }}
+        terraform_version: ${{ inputs.tf_version }}
         terraform_wrapper: false
 
 #    - id: 'auth'
