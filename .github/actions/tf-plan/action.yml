@@ -28,16 +28,16 @@ inputs:
     description: provider_name
     required: true
   sa_email:
-    description: sa_email 
+    description: sa_email
     required: true
   cluster_project_id:
-    description: cluster_project_id 
+    description: cluster_project_id
     required: true
   cluster_name:
     description: cluster_name
     required: true
   cluster_location:
-    description: cluster_location 
+    description: cluster_location
     required: true
 
 runs:
@@ -95,7 +95,7 @@ runs:
         token: ${{ inputs.github_token }}
         issue-number: ${{ inputs.pr_id }}
         body: |
-          Terraform Plan:
+          Terraform Plan for ${{ inputs.environment }}:
 
           ```tf
           ${{ steps.plan.outputs.plan }}
