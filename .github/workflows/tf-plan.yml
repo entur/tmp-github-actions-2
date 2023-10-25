@@ -31,10 +31,8 @@ jobs:
       - name: Terraform Plan
         uses: entur/tmp-github-actions-2/.github/actions/tf-plan@master
         with:
-          #terraform_sa: ${{ env.TF_SA }}
           tf_directory: "terraform"
           tf_version: ${{ inputs.tf_version }}
-          #workload_identity_provider: ${{ secrets.GOOGLE_CREDENTIALS }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
-          environment: ${{ vars.ENVIRONMENT_STAGE }}
+          environment: dev
