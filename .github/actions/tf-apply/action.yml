@@ -57,7 +57,7 @@ runs:
         github_token: ${{ inputs.github_token }}
         workflow: plan.yaml
         pr: ${{ inputs.pr_id }}
-        name: ${{ inputs.pr_id }}-tf-plan
+        name: ${{ inputs.pr_id }}-tf-plan-${{ inputs.environment }}
         path: ${{ inputs.terraform_directory }}
 
     - name: Terraform Apply
@@ -66,7 +66,7 @@ runs:
       shell: bash
       run: |
         echo 'apply<<EOF' >> $GITHUB_OUTPUT
-        terraform apply --var-file=env/${{ inputs.environment }}.tfvars -input=false -no-color tfplan >> $GITHUB_OUTPUT
+        terraform apply --var-file=env/${{ inputs.environment }}.tfvars -input=false -no-color tfplan-${{ inputs.environment }} >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
     - name: Comment Apply
@@ -76,7 +76,7 @@ runs:
         token: ${{ inputs.github_token }}
         issue-number: ${{ inputs.pr_id }}
         body: |
-          Terraform Apply:
+          Terraform Apply for ${{ inputs.environment }}:
 
           ```
           ${{ steps.apply.outputs.apply }}
