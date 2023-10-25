@@ -34,12 +34,18 @@ runs:
         terraform_version: ${{ inputs.tf_version }}
         terraform_wrapper: false
 
-#    - id: 'auth'
-#      name: 'Authenticate to Google Cloud'
-#      uses: 'google-github-actions/auth@v1'
-#      with:
-#        workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
-#        service_account: ${{ secrets.SA_EMAIL }}
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
+        service_account: ${{ secrets.SA_EMAIL }}
+
+    - id: 'get-credentials'
+      uses: 'google-github-actions/get-gke-credentials@v1'
+      with:
+        project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
+        cluster_name: ${{ secrets.CLUSTER_NAME }}
+        location: ${{ secrets.CLUSTER_LOCATION }}
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0.6.0'
