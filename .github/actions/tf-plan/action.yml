@@ -85,8 +85,8 @@ runs:
       id: save-artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.pr_id }}-tf-plan-${{ inputs.environment }}
-        path: ${{ inputs.tf_directory }}/tfplan
+        name: ${{ inputs.pr_id }}-tf-plan
+        path: ${{ inputs.tf_directory }}/tfplan-${{ inputs.environment }}
 
     - name: Comment Plan
       id: comment-plan
