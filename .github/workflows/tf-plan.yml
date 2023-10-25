@@ -43,3 +43,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
           environment: ${{ inputs.environment }}
+          provider_name: ${{ secrets.PROVIDER_NAME }}
+          sa_email: ${{ secrets.SA_EMAIL }}
+          cluster_project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+          cluster_location: ${{ secrets.CLUSTER_LOCATION }}

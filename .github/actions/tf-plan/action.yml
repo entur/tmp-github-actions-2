@@ -24,6 +24,21 @@ inputs:
   environment:
     description: 'Environment'
     required: true
+  provider_name:
+    description: provider_name
+    required: true
+  sa_email:
+    description: sa_email 
+    required: true
+  cluster_project_id:
+    description: cluster_project_id 
+    required: true
+  cluster_name:
+    description: cluster_name
+    required: true
+  cluster_location:
+    description: cluster_location 
+    required: true
 
 runs:
   using: "composite"
@@ -37,15 +52,15 @@ runs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
-        workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
-        service_account: ${{ secrets.SA_EMAIL }}
+        workload_identity_provider: ${{ inputs.provider_name }}
+        service_account: ${{ inputs.sa_email }}
 
     - id: 'get-credentials'
       uses: 'google-github-actions/get-gke-credentials@v1'
       with:
-        project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
-        cluster_name: ${{ secrets.CLUSTER_NAME }}
-        location: ${{ secrets.CLUSTER_LOCATION }}
+        project_id: ${{ inputs.cluster_project_id }}
+        cluster_name: ${{ inputs.cluster_name }}
+        location: ${{ inputs.cluster_location }}
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0.6.0'
