@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         default: 1.1.0
+      environment:
+        required: true
+        type: string
+        default: dev
     
   pull_request:
     paths: ['terraform/**']
@@ -15,7 +19,7 @@ jobs:
   terraform_plan:
     runs-on: ubuntu-latest
     if: github.event.review.state != 'approved'
-    environment: dev
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
 
@@ -35,4 +39,4 @@ jobs:
           tf_version: ${{ inputs.tf_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
-          environment: dev
+          environment: ${{ inputs.environment }}
