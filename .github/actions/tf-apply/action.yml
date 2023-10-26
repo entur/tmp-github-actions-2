@@ -75,7 +75,7 @@ runs:
       uses: dawidd6/action-download-artifact@v2.28.0
       with:
         pr: ${{ inputs.pr_id }}
-        workflow: tf-plan.yml
+        workflow: ci.yml
         name: ${{ inputs.pr_id }}-tf-plan
         path: ${{ inputs.tf_directory }}
 
