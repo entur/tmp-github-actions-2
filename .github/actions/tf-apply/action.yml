@@ -53,8 +53,8 @@ runs:
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        service_account: ${{ inputs.terraform_sa }}
-        credentials_json: ${{ inputs.google_sa_key }}
+        workload_identity_provider: ${{ inputs.provider_name }}
+        service_account: ${{ inputs.sa_email }}
 
     - id: 'get-credentials'
       uses: 'google-github-actions/get-gke-credentials@v1'
