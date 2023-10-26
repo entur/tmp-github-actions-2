@@ -79,6 +79,13 @@ runs:
         name: ${{ inputs.pr_id }}-tf-plan
         path: ${{ inputs.tf_directory }}
 
+    - name: Debug
+      id: Debug
+      working-directory: ${{ inputs.terraform_directory }}
+      shell: bash
+      run: |
+        ls -l
+
     - name: Terraform Apply
       id: apply
       working-directory: ${{ inputs.terraform_directory }}
