@@ -85,7 +85,7 @@ runs:
       shell: bash
       run: |
         echo 'apply<<EOF' >> $GITHUB_OUTPUT
-        terraform apply --var-file=env/${{ inputs.environment }}.tfvars -input=false -no-color tfplan-${{ inputs.environment }} >> $GITHUB_OUTPUT
+        terraform apply -input=false -no-color tfplan-${{ inputs.environment }} >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
 
     - name: Comment Apply
