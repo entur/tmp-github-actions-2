@@ -20,6 +20,7 @@ jobs:
   terraform-apply:
     permissions:
       contents: read
+      id-token: write
     name: Run Terraform apply
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
