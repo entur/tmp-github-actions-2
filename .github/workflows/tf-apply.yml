@@ -39,7 +39,7 @@ jobs:
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Terraform Apply
-        uses: ./.github/actions/tf-apply
+        uses: entur/tmp-github-actions-2/.github/actions/tf-apply@master
         with:
           tf_directory: "terraform"
           tf_version: ${{ inputs.tf_version }}
