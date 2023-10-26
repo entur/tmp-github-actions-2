@@ -30,15 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-#      - name: Get PR ID
-#        id: pr-id
-#        shell: bash
-#        env:
-#          GITHUB_REF: ${{ inputs.github_ref }}
-#        run: |
-#          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-#          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
-
       - name: Terraform Apply
         uses: entur/tmp-github-actions-2/.github/actions/tf-apply@master
         with:

@@ -74,8 +74,8 @@ runs:
       id: download-plan
       uses: dawidd6/action-download-artifact@v2.28.0
       with:
-#        github_token: ${{ inputs.github_token }}
         pr: ${{ inputs.pr_id }}
+        workflow: tf-plan.yml
         name: ${{ inputs.pr_id }}-tf-plan
         path: ${{ inputs.tf_directory }}
 
