@@ -46,7 +46,7 @@ runs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: ${{ inputs.terraforom_version }}
+        terraform_version: ${{ inputs.tf_version }}
         terraform_wrapper: false
 
     - id: 'auth'
@@ -65,7 +65,7 @@ runs:
 
     - name: Terraform Init
       id: init
-      working-directory: ${{ inputs.terraform_directory }}
+      working-directory: ${{ inputs.t_directory }}
       shell: bash
       run: |
         terraform init
@@ -79,16 +79,9 @@ runs:
         name: ${{ inputs.pr_id }}-tf-plan
         path: ${{ inputs.tf_directory }}
 
-    - name: Debug
-      id: Debug
-      working-directory: ${{ inputs.terraform_directory }}
-      shell: bash
-      run: |
-        ls -l
-
     - name: Terraform Apply
       id: apply
-      working-directory: ${{ inputs.terraform_directory }}
+      working-directory: ${{ inputs.tf_directory }}
       shell: bash
       run: |
         echo 'apply<<EOF' >> $GITHUB_OUTPUT
