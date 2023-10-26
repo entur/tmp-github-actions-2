@@ -30,14 +30,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get PR ID
-        id: pr-id
-        shell: bash
-        env:
-          GITHUB_REF: ${{ inputs.github_ref }}
-        run: |
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
+#      - name: Get PR ID
+#        id: pr-id
+#        shell: bash
+#        env:
+#          GITHUB_REF: ${{ inputs.github_ref }}
+#        run: |
+#          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+#          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Terraform Apply
         uses: entur/tmp-github-actions-2/.github/actions/tf-apply@master
@@ -45,7 +45,7 @@ jobs:
           tf_directory: "terraform"
           tf_version: ${{ inputs.tf_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
+          pr_id: ${{ github.event.pull_request.number }}
           environment: ${{ inputs.environment }}
           provider_name: ${{ secrets.PROVIDER_NAME }}
           sa_email: ${{ secrets.SA_EMAIL }}
