@@ -10,7 +10,7 @@ on:
       environment:
         required: true
         type: string
-        default: dev
+        default: ci_dev
 
   pull_request:
     paths: ['terraform/**']
@@ -23,7 +23,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     if: github.event.review.state != 'approved'
-    environment: ${{ inputs.environment }}
+    environment: ci_${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
 
