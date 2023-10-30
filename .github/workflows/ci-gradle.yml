@@ -1,0 +1,48 @@
+name: CI Gradle
+
+on:
+  workflow_call:
+    inputs:
+      java_version:
+        type: string
+        default: '17'
+      java_distribution:
+        type: string
+        default: 'temurin'
+
+jobs:
+  ci:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      pull-requests: write
+    runs-on: ubuntu-latest
+    # if: github.event.review.state != 'approved'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: ${{ inputs.java_version }}
+          distribution: ${{ inputs.java_distribution }}
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
+      - name: Assemble
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        with:
+          arguments: assemble
+      - name: Check
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        with:
+          arguments: check
+      - name: Test
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        with:
+          arguments: test
+      - name: SAST
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+        with:
+          arguments: dependencyCheckAnalyze
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Package
+          path: build/libs
