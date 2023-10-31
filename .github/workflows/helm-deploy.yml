@@ -51,26 +51,22 @@ jobs:
     # if: github.event.review.state != 'approved'
     steps:
       - uses: actions/checkout@v4
-      # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      #   with:
-      #     version: '445.0.0'
-      #     # service_account_email: ${{ secrets.GKE_EMAIL }}
-      #     # service_account_key: ${{ secrets.GKE_KEY }}
-      # - run: |
-      #     # Set up docker to authenticate
-      #     # via gcloud command-line tool.
-      #     gcloud auth configure-docker
-      # - name: Setup .env file
-      #   run: |
-      #     echo GIPHY_API_KEY=${{ secrets.GIPHY_API }} > cmd/.env
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
+          service_account: ${{ secrets.SA_EMAIL }}
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+          location: ${{ secrets.CLUSTER_LOCATION }}
       - name: Install Helm
         run: |
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
       - name: Deploy
         run: |
-          # gcloud container clusters get-credentials $GKE_CLUSTER \
-          #   --zone $GKE_ZONE \
-          #   --project $GKE_PROJECT
           helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
             -f helm/${{ inputs.release_name}}/env/values-kub-ent-${{ inputs.environment }}.yaml \
             --set common.container.image=${{ inputs.image_tag }} \
