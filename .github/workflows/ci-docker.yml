@@ -17,13 +17,19 @@ jobs:
     # if: github.event.review.state != 'approved'
     steps:
       - uses: actions/checkout@v4
-      - name: Download ${{ inputs.app_name }} Jar
-        uses: dawidd6/action-download-artifact@v2.28.0
+      - name: Download a single artifact
+        uses: actions/download-artifact@v3
         with:
-          pr: ${{ github.event.pull_request.number }}
-          workflow: ci.yml
           name: ${{ github.event.pull_request.number }}-app-jar
-          path: build/libs
+      # - name: Download ${{ inputs.app_name }} Jar
+      #   uses: dawidd6/action-download-artifact@v2.28.0
+      #   with:
+      #     pr: ${{ github.event.pull_request.number }}
+      #     workflow: ci.yml
+      #     name: ${{ github.event.pull_request.number }}-app-jar
+      #     path: build/libs
+      - name: Ls
+        run: ls
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build Docker Image
