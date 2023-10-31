@@ -72,7 +72,7 @@ jobs:
           #   --zone $GKE_ZONE \
           #   --project $GKE_PROJECT
           helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
-            -f env/values-kub-ent-${{ inputs.environment }}.yaml \
+            -f helm/${{ inputs.release_name}}/env/values-kub-ent-${{ inputs.environment }}.yaml \
             --set common.container.image=${{ inputs.image_tag }} \
             --atomic
           kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
