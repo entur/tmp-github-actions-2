@@ -69,6 +69,7 @@ jobs:
         run: |
           helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
             -f helm/${{ inputs.release_name}}/env/values-kub-ent-${{ inputs.environment }}.yaml \
+            --namespace ${{ inputs.namespace }} \
             --set common.container.image=${{ inputs.image_tag }} \
             --atomic
           kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
