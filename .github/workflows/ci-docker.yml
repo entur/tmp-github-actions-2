@@ -1,4 +1,4 @@
-name: CI Gradle
+name: CI Docker
 
 on:
   workflow_call:
