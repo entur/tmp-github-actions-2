@@ -11,7 +11,7 @@ on:
         default: 'temurin'
 
 jobs:
-  ci:
+  ci-gradle:
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -44,5 +44,5 @@ jobs:
           arguments: dependencyCheckAnalyze
       - uses: actions/upload-artifact@v3
         with:
-          name: Package
+          name: ${{ github.event.pull_request.number }}-app-jar
           path: build/libs
