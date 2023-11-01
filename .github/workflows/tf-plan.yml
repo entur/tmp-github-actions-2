@@ -13,13 +13,28 @@ on:
         default: ci_dev
 
 jobs:
+  paths_filter:
+    permissions:
+      pull-requests: 'read'
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.filter.outputs.terraform }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          terraform:
+            - 'terraform/**'
   terraform_plan:
     permissions:
       contents: 'read'
       id-token: 'write'
       pull-requests: write
     runs-on: ubuntu-latest
-    if: github.event.review.state != 'approved'
+    needs: paths_filter
+    if: ${{ github.event.review.state != 'approved' }} && ${{ needs.paths_filer.outputs.output1 == 'true' }}
     environment: ci_${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3

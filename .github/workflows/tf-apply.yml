@@ -13,15 +13,29 @@ on:
         default: 1.1.0
 
 jobs:
-
+  paths_filter:
+    permissions:
+      pull-requests: 'read'
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.filter.outputs.terraform }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          terraform:
+            - 'terraform/**'
   terraform-apply:
     permissions:
       contents: read
       id-token: write
       pull-requests: write
     name: Run Terraform apply
+    needs: paths_filter
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: ${{ github.event.pull_request.merged == true }} && ${{ needs.paths_filer.outputs.output1 == 'true' }}
 
     environment: ${{ inputs.environment }}
 
