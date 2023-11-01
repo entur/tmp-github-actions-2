@@ -18,7 +18,7 @@ jobs:
       pull-requests: 'read'
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.filters.outputs.terraform }}
+      output1: ${{ steps.filter.outputs.terraform }}
     steps:
     - uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
@@ -27,6 +27,14 @@ jobs:
         filters: |
           terraform:
             - 'terraform/**'
+    - name: workflow tests
+      if: steps.filter.outputs.terraform == 'true'
+      run: echo "Terraform changed"
+
+    # run only if not 'workflows' files were changed
+    - name: not workflow tests
+      if: steps.filter.outputs.terraform != 'true'
+      run: echo "Terraform NOT changed"
   terraform-apply:
     permissions:
       contents: read
