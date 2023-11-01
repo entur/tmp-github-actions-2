@@ -18,7 +18,7 @@ jobs:
       pull-requests: 'read'
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.filter.outputs.terraform }}
+      terraform: ${{ steps.filter.outputs.terraform }}
     steps:
     - uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
@@ -32,9 +32,9 @@ jobs:
       contents: 'read'
       id-token: 'write'
       pull-requests: write
-    runs-on: ubuntu-latest
     needs: paths_filter
-    if: ${{ github.event.review.state != 'approved' }} && ${{ needs.paths_filer.outputs.output1 == 'true' }}
+    if: ${{ github.event.review.state != 'approved' && needs.paths_filter.outputs.terraform == 'true' }}
+    runs-on: ubuntu-latest
     environment: ci_${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
