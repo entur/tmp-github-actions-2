@@ -2,6 +2,7 @@ name: Terraform Plan
 
 on:
   workflow_call:
+    paths: ['terraform/**']
     inputs:
       tf_version:
         required: false
@@ -11,9 +12,6 @@ on:
         required: true
         type: string
         default: ci_dev
-
-  pull_request:
-    paths: ['terraform/**']
 
 jobs:
   terraform_plan:
