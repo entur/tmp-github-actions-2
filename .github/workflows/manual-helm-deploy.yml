@@ -1,0 +1,76 @@
+name: Helm Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_name:
+        description: "The release name"
+        required: true
+        type: string
+      namespace:
+        description: "The namespace to use"
+        required: true
+        type: string
+      image_tag:
+        description: "The image tag to deploy"
+        required: true
+        type: string
+        default: "1.0.0"
+      environment:
+        description: "The target environment"
+        required: true
+        type: environment
+  workflow_call:
+    inputs:
+      release_name:
+        description: "The release name"
+        required: true
+        type: string
+      namespace:
+        description: "The namespace to use"
+        required: true
+        type: string
+      image_tag:
+        description: "The image tag to deploy"
+        required: true
+        type: string
+        default: "1.0.0"
+      environment:
+        description: "The target environment"
+        required: true
+        type: string
+
+jobs:
+  helm-deploy:
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      pull-requests: write
+    runs-on: ubuntu-latest
+    # if: github.event.review.state != 'approved'
+    steps:
+      - uses: actions/checkout@v4
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
+          service_account: ${{ secrets.SA_EMAIL }}
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+          location: ${{ secrets.CLUSTER_LOCATION }}
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - name: Deploy
+        run: |
+          helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
+            -f helm/${{ inputs.release_name}}/env/values-kub-ent-${{ inputs.environment }}.yaml \
+            --namespace ${{ inputs.namespace }} \
+            --set common.container.image=${{ inputs.image_tag }} \
+            --atomic
+          kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
+          kubectl get services -o wide
