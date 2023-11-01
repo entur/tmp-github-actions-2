@@ -2,7 +2,6 @@ name: Terraform apply
 
 on:
   workflow_call:
-    paths: ['terraform/**']
     inputs:
       environment:
         required: true
