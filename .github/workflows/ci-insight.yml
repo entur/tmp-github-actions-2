@@ -40,6 +40,7 @@ jobs:
           body: |
             <details>
               <summary>Diff from this PR `${{ github.event.number }}` to `current-${{ inputs.environment }}`</summary>
+
               ```diff
               ${{ steps.pr-diff.outputs.GIT_DIFF}}
               ```
