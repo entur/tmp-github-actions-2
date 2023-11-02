@@ -17,13 +17,14 @@ jobs:
     # if: github.event.review.state != 'approved'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
       - name: Get diff
         id: pr-diff
         shell: bash
         env:
           RELEASE: current-${{ inputs.environment }}
         run: |
-          git fetch --unshallow
           GIT_DIFF=$(git diff $RELEASE)
           echo "GIT_DIFF=$GIT_DIFF" >> $GITHUB_OUTPUT
       - name: Comment Diff
