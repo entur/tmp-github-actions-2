@@ -23,6 +23,7 @@ jobs:
         env:
           RELEASE: current-${{ inputs.environment }}
         run: |
+          git fetch --unshallow
           GIT_DIFF=$(git diff $RELEASE)
           echo "GIT_DIFF=$GIT_DIFF" >> $GITHUB_OUTPUT
       - name: Comment Diff
