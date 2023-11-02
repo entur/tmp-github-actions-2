@@ -38,7 +38,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.number }}
           body: |
-            diff from ${{ github.event.number }} to ${{ matrix.environment }}:
-            ```git
+            diff from this PR `${{ github.event.number }}` to `current-${{ inputs.environment }}`:
+            ```diff
             ${{ steps.pr-diff.outputs.GIT_DIFF}}
             ```
