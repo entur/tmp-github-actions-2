@@ -74,3 +74,10 @@ jobs:
             --atomic
           kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
           kubectl get services -o wide
+      - name: Set Git tag
+        uses: weareyipyip/walking-tag-action@v2
+        with:
+          tag-name: current-${{ inputs.environment }}
+          tag-message: The current ${{ inputs.devenvironment }} release is based on this commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

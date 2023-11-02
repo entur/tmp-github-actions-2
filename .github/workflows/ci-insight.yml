@@ -1,0 +1,39 @@
+name: CI Insights
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+jobs:
+  ci-gradle:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      pull-requests: write
+    runs-on: ubuntu-latest
+    # if: github.event.review.state != 'approved'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get diff
+        id: pr-diff
+        shell: bash
+        env:
+          PR_SHA: ${{ github.event.workflow_run.head_sha }}
+          RELEASE: current-${{ inputs.environment }}
+        run: |
+          GIT_DIFF=$(git diff $PR_SHA $RELEASE)
+          echo "GIT_DIFF=$GIT_DIFF" >> $GITHUB_OUTPUT
+      - name: Comment Diff
+        id: comment-diff
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.number }}
+          body: |
+            diff from ${{ github.event.number }} to ${{ matrix.environment }}:
+            ```git
+            ${{ steps.pr-diff.outputs.GIT_DIFF}}
+            ```
