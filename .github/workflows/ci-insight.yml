@@ -26,7 +26,7 @@ jobs:
         env:
           RELEASE: current-${{ inputs.environment }}
         run: |
-          GIT_DIFF=$(git diff $RELEASE)
+          GIT_DIFF="$(git diff $RELEASE)"
           echo "GIT_DIFF=$GIT_DIFF" >> $GITHUB_OUTPUT
       - name: Comment Diff
         id: comment-diff
