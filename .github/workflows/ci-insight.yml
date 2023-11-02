@@ -21,10 +21,9 @@ jobs:
         id: pr-diff
         shell: bash
         env:
-          PR_SHA: ${{ github.sha }}
           RELEASE: current-${{ inputs.environment }}
         run: |
-          GIT_DIFF=$(git diff $PR_SHA $RELEASE)
+          GIT_DIFF=$(git diff $RELEASE)
           echo "GIT_DIFF=$GIT_DIFF" >> $GITHUB_OUTPUT
       - name: Comment Diff
         id: comment-diff
