@@ -21,7 +21,7 @@ jobs:
         id: pr-diff
         shell: bash
         env:
-          PR_SHA: ${{ github.event.workflow_run.head_sha }}
+          PR_SHA: ${{ github.sha }}
           RELEASE: current-${{ inputs.environment }}
         run: |
           GIT_DIFF=$(git diff $PR_SHA $RELEASE)
