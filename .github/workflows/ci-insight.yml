@@ -26,8 +26,11 @@ jobs:
         env:
           RELEASE: current-${{ inputs.environment }}
         run: |
-          GIT_DIFF="$(git diff $RELEASE)"
-          echo "GIT_DIFF=$GIT_DIFF" >> $GITHUB_OUTPUT
+          {
+            echo 'GIT_DIFF<<EOF'
+            git diff $RELEASE
+            echo EOF
+          } >> $GITHUB_OUTPUT
       - name: Comment Diff
         id: comment-diff
         uses: peter-evans/create-or-update-comment@v2
