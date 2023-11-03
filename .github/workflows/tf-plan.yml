@@ -36,7 +36,6 @@ jobs:
     needs: paths_filter
     if: ${{ github.event.review.state != 'approved' && needs.paths_filter.outputs.terraform == 'true' }}
     runs-on: ubuntu-latest
-    environment: ci_${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
 
