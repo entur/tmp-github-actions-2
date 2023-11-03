@@ -3,6 +3,9 @@ name: CI Gradle
 on:
   workflow_call:
     inputs:
+      watch:
+        type: string
+        default: 'src'
       java_version:
         type: string
         default: '17'
@@ -11,13 +14,29 @@ on:
         default: 'temurin'
 
 jobs:
+  watch_filter:
+    name: Check watched changes
+    permissions:
+      pull-requests: 'read'
+    runs-on: ubuntu-latest
+    outputs:
+      changes: ${{ steps.filter.outputs.changes }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          changes:
+            - '${{ inputs.watch }}/**'
   ci-gradle:
     permissions:
       contents: 'read'
       id-token: 'write'
       pull-requests: write
     runs-on: ubuntu-latest
-    # if: github.event.review.state != 'approved'
+    needs: watch_filter
+    if: needs.watch_filter.outputs.changes == 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v3
@@ -46,3 +65,5 @@ jobs:
         with:
           name: ${{ github.event.pull_request.number }}-app-jar
           path: build/libs
+      - id: Output build
+        run: echo "build=${{ github.event.pull_request.number }}-app-jar" >> "$GITHUB_OUTPUT"
