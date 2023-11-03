@@ -51,8 +51,8 @@ jobs:
           github_token: ${{ secretsc.GITHUB_TOKEN }}
           pr_id: ${{ github.event.pull_request.number }}
           environment: ${{ inputs.environment }}
-          provider_name: ${{ secrets[format('{}_PROVIDER_NAME', inputs.environment)] }}
-          sa_email: ${{ secrets[format('{}_SA_EMAIL', inputs.environment)] }}
-          cluster_project_id: ${{ secrets[format('{}_CLUSTER_PROJECT_ID', inputs.environment)] }}
-          cluster_name: ${{ secrets[format('{}_CLUSTER_NAME', inputs.environment)] }}
-          cluster_location: ${{ secrets[format('{}_CLUSTER_LOCATION', inputs.environment)] }}
+          provider_name: ${{ secrets[format('{0}_PROVIDER_NAME', inputs.environment)] }}
+          sa_email: ${{ secrets[format('{0}_SA_EMAIL', inputs.environment)] }}
+          cluster_project_id: ${{ secrets[format('{0}_CLUSTER_PROJECT_ID', inputs.environment)] }}
+          cluster_name: ${{ secrets[format('{0}_CLUSTER_NAME', inputs.environment)] }}
+          cluster_location: ${{ secrets[format('{0}_CLUSTER_LOCATION', inputs.environment)] }}
