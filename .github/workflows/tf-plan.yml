@@ -12,6 +12,7 @@ on:
         type: string
         default: ci_dev
 
+
 jobs:
   paths_filter:
     name: Check terraform changes
@@ -36,6 +37,8 @@ jobs:
     needs: paths_filter
     if: ${{ github.event.review.state != 'approved' && needs.paths_filter.outputs.terraform == 'true' }}
     runs-on: ubuntu-latest
+    env:
+      TF_WORKSPACE = ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
 
