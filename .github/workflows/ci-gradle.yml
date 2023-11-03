@@ -65,5 +65,5 @@ jobs:
         with:
           name: ${{ github.event.pull_request.number }}-app-jar
           path: build/libs
-      - id: Output build
+      - name: Output build success flag
         run: echo "build=${{ github.event.pull_request.number }}-app-jar" >> "$GITHUB_OUTPUT"
