@@ -35,7 +35,7 @@ jobs:
         id: comment-diff
         uses: peter-evans/create-or-update-comment@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
           issue-number: ${{ github.event.number }}
           body: |
             <details>

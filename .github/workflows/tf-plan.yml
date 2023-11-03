@@ -54,11 +54,11 @@ jobs:
         with:
           tf_directory: "terraform"
           tf_version: ${{ inputs.tf_version }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
           environment: ${{ inputs.environment }}
-          provider_name: ${{ secrets.PROVIDER_NAME }}
-          sa_email: ${{ secrets.SA_EMAIL }}
-          cluster_project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
-          cluster_name: ${{ secrets.CLUSTER_NAME }}
-          cluster_location: ${{ secrets.CLUSTER_LOCATION }}
+          provider_name: ${{ secrets[format('{}_PROVIDER_NAME', inputs.environment)] }}
+          sa_email: ${{ secrets[format('{}_SA_EMAIL', inputs.environment)] }}
+          cluster_project_id: ${{ secrets[format('{}_CLUSTER_PROJECT_ID', inputs.environment)] }}
+          cluster_name: ${{ secrets[format('{}_CLUSTER_NAME', inputs.environment)] }}
+          cluster_location: ${{ secrets[format('{}_CLUSTER_LOCATION', inputs.environment)] }}

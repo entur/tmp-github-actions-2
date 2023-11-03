@@ -54,14 +54,14 @@ jobs:
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: ${{ secrets.PROVIDER_NAME }}
-          service_account: ${{ secrets.SA_EMAIL }}
+          workload_identity_provider: ${{ secrets[format('{}_PROVIDER_NAME', inputs.environment)] }}
+          service_account: ${{ secrets[format('{}_SA_EMAIL', inputs.environment)] }}
       - id: 'get-credentials'
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
-          project_id: ${{ secrets.CLUSTER_PROJECT_ID }}
-          cluster_name: ${{ secrets.CLUSTER_NAME }}
-          location: ${{ secrets.CLUSTER_LOCATION }}
+          project_id: ${{ secrets[format('{}_CLUSTER_PROJECT_ID', inputs.environment)] }}
+          cluster_name: ${{ secrets[format('{}_CLUSTER_NAME', inputs.environment)] }}
+          location: ${{ secrets[format('{}_CLUSTER_LOCATION', inputs.environment)] }}
       - name: Install Helm
         run: |
           curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
@@ -80,4 +80,4 @@ jobs:
       #     tag-name: current-${{ inputs.environment }}
       #     tag-message: The current ${{ inputs.devenvironment }} release is based on this commit
       #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
