@@ -54,7 +54,7 @@ jobs:
         with:
           tf_directory: "terraform"
           tf_version: ${{ inputs.tf_version }}
-          github_token: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
           environment: ${{ inputs.environment }}
           provider_name: ${{ secrets[format('{}_PROVIDER_NAME', inputs.environment)] }}

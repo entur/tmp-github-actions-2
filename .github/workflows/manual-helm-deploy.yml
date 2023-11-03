@@ -80,4 +80,4 @@ jobs:
       #     tag-name: current-${{ inputs.environment }}
       #     tag-message: The current ${{ inputs.devenvironment }} release is based on this commit
       #   env:
-      #     GITHUB_TOKEN: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

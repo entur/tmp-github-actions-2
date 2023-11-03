@@ -90,7 +90,7 @@ jobs:
           tag-name: current-dev
           tag-message: The current dev release is based on this commit
         env:
-          GITHUB_TOKEN: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # needs: [print-envs]
 
   deploy-tst:
@@ -125,7 +125,7 @@ jobs:
             tag-name: current-tst
             tag-message: The current tst release is based on this commit
           env:
-            GITHUB_TOKEN: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       needs: [deploy-dev]
 
   deploy-prd:
@@ -149,5 +149,5 @@ jobs:
             tag-name: current-prd
             tag-message: The current prd release is based on this commit
           env:
-            GITHUB_TOKEN: ${{ secrets[format('{}_GITHUB_TOKEN', inputs.environment)] }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       needs: [deploy-tst]
