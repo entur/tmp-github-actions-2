@@ -44,5 +44,5 @@ jobs:
               ```diff
               ${{ steps.pr-diff.outputs.GIT_DIFF}}
               ```
-              https://github.com/entur/tmp-ci-cd-demo/compare/${{GITHUB_SHA}}..current-${{ inputs.environment }}
+              https://github.com/entur/tmp-ci-cd-demo/compare/${{ github.sha }}..current-${{ inputs.environment }}
             </details>
