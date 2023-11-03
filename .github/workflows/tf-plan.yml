@@ -38,7 +38,7 @@ jobs:
     if: ${{ github.event.review.state != 'approved' && needs.paths_filter.outputs.terraform == 'true' }}
     runs-on: ubuntu-latest
     env:
-      TF_WORKSPACE = ${{ inputs.environment }}
+      TF_WORKSPACE: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
 
