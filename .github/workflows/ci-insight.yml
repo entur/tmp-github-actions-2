@@ -28,7 +28,7 @@ jobs:
         run: |
           {
             echo 'GIT_DIFF<<EOF'
-            git diff --name-status $RELEASE
+            git diff $RELEASE
             echo EOF
           } >> $GITHUB_OUTPUT
       - name: Comment Diff
@@ -41,8 +41,10 @@ jobs:
             <details>
               <summary>Compare `${{ github.event.pull_request.title }}` to the current ${{ inputs.environment }} deployment</summary>
 
+              See a side by side git diff here: 
+              https://github.com/entur/tmp-ci-cd-demo/compare/${{ github.sha }}..current-${{ inputs.environment }}
+
               ```diff
               ${{ steps.pr-diff.outputs.GIT_DIFF}}
               ```
-              https://github.com/entur/tmp-ci-cd-demo/compare/${{ github.sha }}..current-${{ inputs.environment }}
             </details>
