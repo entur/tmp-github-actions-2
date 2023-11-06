@@ -15,28 +15,30 @@ on:
 
 jobs:
   watch_filter:
-    name: Check watched changes
+    name: Check if application changes
     permissions:
-      pull-requests: 'read'
+      pull-requests: read
     runs-on: ubuntu-latest
     outputs:
-      changes: ${{ steps.filter.outputs.changes }}
+      found_changes: ${{ steps.filter.outputs.changes }}
     steps:
     - uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
+      name: Check if application changes
       id: filter
       with:
         filters: |
           changes:
             - '${{ inputs.watch }}/**'
   ci-gradle:
+    name: CI Gradle
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
     needs: watch_filter
-    if: needs.watch_filter.outputs.changes == 'true'
+    if: needs.watch_filter.outputs.found_changes == 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v3
@@ -62,6 +64,7 @@ jobs:
       #   with:
       #     arguments: dependencyCheckAnalyze
       - uses: actions/upload-artifact@v3
+        name: Upload artifact
         with:
           name: ${{ github.event.pull_request.number }}-app-jar
           path: build/libs

@@ -1,4 +1,4 @@
-name: Helm Deploy
+name: Helm deploy
 
 on:
   workflow_dispatch:
@@ -42,42 +42,44 @@ on:
 
 jobs:
   helm-deploy:
+    name: Helm deploy
     environment: ${{ inputs.environment }}
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: write
+      id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
-    # if: github.event.review.state != 'approved'
     steps:
       - uses: actions/checkout@v4
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v1'
+      - id: auth
+        uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: ${{ secrets[format('{0}_PROVIDER_NAME', inputs.environment)] }}
           service_account: ${{ secrets[format('{0}_SA_EMAIL', inputs.environment)] }}
-      - id: 'get-credentials'
-        uses: 'google-github-actions/get-gke-credentials@v1'
+      - id: get-credentials
+        uses: google-github-actions/get-gke-credentials@v1
         with:
           project_id: ${{ secrets[format('{0}_CLUSTER_PROJECT_ID', inputs.environment)] }}
           cluster_name: ${{ secrets[format('{0}_CLUSTER_NAME', inputs.environment)] }}
           location: ${{ secrets[format('{0}_CLUSTER_LOCATION', inputs.environment)] }}
-      - name: Install Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - uses: azure/setup-helm@v3
+        name: Install Helm
+        with:
+          version: v3.13.1
+          id: install
       - name: Deploy
         run: |
           helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
-            -f helm/${{ inputs.release_name}}/env/values-kub-ent-${{ inputs.environment }}.yaml \
+            -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
             --namespace ${{ inputs.namespace }} \
             --set common.container.image=${{ inputs.image_tag }} \
             --atomic
           kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
-          kubectl get services -o wide
-      # - name: Set Git tag
-      #   uses: weareyipyip/walking-tag-action@v2
-      #   with:
-      #     tag-name: current-${{ inputs.environment }}
-      #     tag-message: The current ${{ inputs.devenvironment }} release is based on this commit
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets[format('{0}_GITHUB_TOKEN', inputs.environment)] }}
+          kubectl -n ${{ inputs.namespace }} get services -o wide
+      - name: Set Git tag
+        uses: weareyipyip/walking-tag-action@v2
+        with:
+          tag-name: current-${{ inputs.environment }}
+          tag-message: The current ${{ inputs.environment }} release is based on this commit
+        env:
+          GITHUB_TOKEN: ${{ secrets[format('{0}_GITHUB_TOKEN', inputs.environment)] }}

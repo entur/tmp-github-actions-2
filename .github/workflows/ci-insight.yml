@@ -1,4 +1,4 @@
-name: CI Insights
+name: CI insights
 
 on:
   workflow_call:
@@ -8,13 +8,13 @@ on:
         type: string
 
 jobs:
-  ci-gradle:
+  ci-insights:
+    name: CI insights
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
-    # if: github.event.review.state != 'approved'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,24 +24,24 @@ jobs:
         id: pr-diff
         shell: bash
         env:
-          RELEASE: current-${{ inputs.environment }}
+          RELEASE: current-${{ inputs.environment }}
         run: |
           {
             echo 'GIT_DIFF<<EOF'
             git diff $RELEASE
             echo EOF
           } >> $GITHUB_OUTPUT
-      - name: Comment Diff
+      - name: Comment diff
         id: comment-diff
         uses: peter-evans/create-or-update-comment@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.number }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             <details>
-              <summary>Compare `${{ github.event.pull_request.title }}` to the current ${{ inputs.environment }} deployment</summary>
+              <summary>Compare `${{ github.event.pull_request.title }}` to the current `${{ inputs.environment }}` deployment</summary>
 
-              See a side by side git diff here: 
+              See a side by side git diff here:
               https://github.com/entur/tmp-ci-cd-demo/compare/${{ github.sha }}..current-${{ inputs.environment }}
 
               ```diff

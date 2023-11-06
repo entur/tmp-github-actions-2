@@ -6,41 +6,35 @@ on:
       app_name:
         required: true
         type: string
+      image_tag:
+        required: false
+        type: string
+        default: latest
 
 jobs:
   ci-docker:
+    name: CI Docker
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
-    # if: github.event.review.state != 'approved'
     steps:
       - uses: actions/checkout@v4
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         with:
           name: ${{ github.event.pull_request.number }}-app-jar
-      # - name: Download ${{ inputs.app_name }} Jar
-      #   uses: dawidd6/action-download-artifact@v2.28.0
-      #   with:
-      #     pr: ${{ github.event.pull_request.number }}
-      #     workflow: ci.yml
-      #     name: ${{ github.event.pull_request.number }}-app-jar
-      #     path: build/libs
-      - name: Ls
-        run: ls
-      - name: Set up Docker Buildx
+      - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
-      - name: Build Docker Image
+      - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: ${{ inputs.app_name }}:latest
+          tags: ${{ inputs.app_name }}:${{ inputs.image_tag }}
           outputs: type=docker,dest=/tmp/appimage.tar
-      - name: Upload ${{ inputs.app_name }} Image
+      - name: Upload ${{ inputs.app_name }} image
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.app_name }}
           path: /tmp/appimage.tar
-

@@ -1,4 +1,4 @@
-name: Terraform Plan
+name: Terraform plan
 
 on:
   workflow_call:
@@ -10,54 +10,43 @@ on:
       environment:
         required: true
         type: string
-        default: ci_dev
 
 
 jobs:
-  paths_filter:
-    name: Check terraform changes
+  terraform_check:
+    name: Check if terraform changes
     permissions:
-      pull-requests: 'read'
+      pull-requests: read
     runs-on: ubuntu-latest
     outputs:
-      terraform: ${{ steps.filter.outputs.terraform }}
+      found_changes: ${{ steps.filter.outputs.terraform }}
     steps:
     - uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
+      name: Check if terraform changes
       id: filter
       with:
         filters: |
           terraform:
             - 'terraform/**'
+
   terraform_plan:
+    name: Plan terraform changes
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: read
+      id-token: write
       pull-requests: write
-    needs: paths_filter
-    if: ${{ github.event.review.state != 'approved' && needs.paths_filter.outputs.terraform == 'true' }}
+    needs: terraform_check
+    if: github.event.review.state != 'approved' && needs.terraform_check.outputs.found_changes == 'true'
     runs-on: ubuntu-latest
-    env:
-      TF_WORKSPACE: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
-
-      - name: Get PR ID
-        id: pr-id
-        shell: bash
-        env:
-          GITHUB_REF: ${{ inputs.github_ref }}
-        run: |
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
-
-      - name: Terraform Plan
+      - name: Terraform plan
         uses: entur/tmp-github-actions-2/.github/actions/tf-plan@master
         with:
           tf_directory: "terraform"
           tf_version: ${{ inputs.tf_version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_id: ${{ steps.pr-id.outputs.PR_NUMBER }}
           environment: ${{ inputs.environment }}
           provider_name: ${{ secrets[format('{0}_PROVIDER_NAME', inputs.environment)] }}
           sa_email: ${{ secrets[format('{0}_SA_EMAIL', inputs.environment)] }}

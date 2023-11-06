@@ -18,9 +18,6 @@ inputs:
   google_service_account:
     description: 'GCP service account'
     required: false
-  pr_id:
-    description: 'Pull request ID'
-    required: true
   environment:
     description: 'Environment'
     required: true
@@ -73,6 +70,13 @@ runs:
       run: |
         terraform init
 
+    - name: Terraform Workspace
+      id: init
+      working-directory: ${{ inputs.tf_directory }}
+      shell: bash
+      run: |
+        terraform workspace select ${{ inputs.environment }}
+
     - name: Terraform Plan
       id: plan
       working-directory: ${{ inputs.tf_directory }}
@@ -86,7 +90,7 @@ runs:
       id: save-artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.pr_id }}-tf-plan
+        name: ${{ github.event.pull_request.number }}-tf-plan
         path: ${{ inputs.tf_directory }}/tfplan-${{ inputs.environment }}
 
     - name: Comment Plan
@@ -94,7 +98,7 @@ runs:
       uses: peter-evans/create-or-update-comment@v2
       with:
         token: ${{ inputs.github_token }}
-        issue-number: ${{ inputs.pr_id }}
+        issue-number: ${{ github.event.pull_request.number }}
         body: |
           Terraform Plan for ${{ inputs.environment }}:
 
