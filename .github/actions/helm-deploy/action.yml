@@ -32,26 +32,22 @@ runs:
           need_deploy:
             - 'terraform/**'
             - 'helm/**'
-#    - id: install
-#      uses: azure/setup-helm@v3
-#      name: Install Helm
-#      with:
-#        version: v3.13.1
     - id: install
+      uses: azure/setup-helm@v3
       name: Install Helm
-      shell: bash
-      run: |
-        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      with:
+        version: v3.13.1
     - id: deploy-given-tag
       name: Deploy given tag
       if: inputs.image_tag != ''
       shell: bash
       run: |
-        helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
-          -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
-          --namespace ${{ inputs.namespace }} \
-          --set common.container.image=eu.gcr.io/entur-system-1287/${{ inputs.release_name }}:${{ inputs.image_tag }} \
-          --atomic
+        helm list --namespace ${{ inputs.namespace }}
+#        helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
+#          -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
+#          --namespace ${{ inputs.namespace }} \
+#          --set common.container.image=eu.gcr.io/entur-system-1287/${{ inputs.release_name }}:${{ inputs.image_tag }} \
+#          --atomic
         kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
         kubectl -n ${{ inputs.namespace }} get services -o wide
     - id: deploy-new-tag
