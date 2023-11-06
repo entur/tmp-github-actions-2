@@ -38,8 +38,6 @@ jobs:
           project_id: ${{ secrets[format('{0}_CLUSTER_PROJECT_ID', inputs.environment)] }}
           cluster_name: ${{ secrets[format('{0}_CLUSTER_NAME', inputs.environment)] }}
           location: ${{ secrets[format('{0}_CLUSTER_LOCATION', inputs.environment)] }}
-      - id: 'get-pods'
-        run: 'kubectl get pods -n hest-er-best'
       - name: Helm deploy
         uses: entur/tmp-github-actions-2/.github/actions/helm-deploy@master
         with:
