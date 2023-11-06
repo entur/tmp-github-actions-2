@@ -57,11 +57,15 @@ jobs:
           registry: eu.gcr.io
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
-      - name: Download application build/jar
-        uses: actions/download-artifact@v3
+      - name: Download artifact
+        id: download-artifact
         if: inputs.download_artifact
+        uses: dawidd6/action-download-artifact@v2.28.0
         with:
+          pr: ${{ github.event.pull_request.number }}
+          workflow: ci.yml
           name: ${{ github.event.pull_request.number }}-${{ inputs.app_name }}
+          path: build/libs
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
