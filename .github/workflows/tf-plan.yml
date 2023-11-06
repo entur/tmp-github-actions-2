@@ -13,7 +13,7 @@ on:
 
 
 jobs:
-  terraform_check:
+  terraform-check:
     name: Check if terraform changes
     permissions:
       pull-requests: read
@@ -30,14 +30,14 @@ jobs:
           terraform:
             - 'terraform/**'
 
-  terraform_plan:
+  terraform-plan:
     name: Plan terraform changes
     permissions:
       contents: read
       id-token: write
       pull-requests: write
-    needs: terraform_check
-    if: github.event.review.state != 'approved' && needs.terraform_check.outputs.found_changes == 'true'
+    needs: terraform-check
+    if: github.event.review.state != 'approved' && needs.terraform-check.outputs.found_changes == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
