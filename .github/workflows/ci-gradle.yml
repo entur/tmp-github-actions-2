@@ -6,6 +6,9 @@ on:
       watch:
         type: string
         default: 'src'
+      app_name:
+        required: true
+        type: string
       java_version:
         type: string
         default: '17'
@@ -68,8 +71,8 @@ jobs:
       - uses: actions/upload-artifact@v3
         name: Upload artifact
         with:
-          name: ${{ github.event.pull_request.number }}-app-jar
+          name: ${{ github.event.pull_request.number }}-${{ inputs.app_name }}
           path: build/libs
       - name: Output build success flag
         id: output
-        run: echo "build=${{ github.event.pull_request.number }}-app-jar" >> "$GITHUB_OUTPUT"
+        run: echo "build=${{ github.event.pull_request.number }}-${{ inputs.app_name }}" >> "$GITHUB_OUTPUT"
