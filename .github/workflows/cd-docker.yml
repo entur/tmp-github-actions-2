@@ -3,6 +3,9 @@ name: CD Docker
 on:
   workflow_call:
     inputs:
+      environment:
+        type: string
+        default: prd
       app_name:
         required: true
         type: string
@@ -21,6 +24,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: ${{ secrets[format('{0}_PROVIDER_NAME', inputs.environment)] }}
+          service_account: ${{ secrets[format('{0}_SA_EMAIL', inputs.environment)] }}
       - name: Download a single artifact
         uses: actions/download-artifact@v3
         if: inputs.download_artifact
