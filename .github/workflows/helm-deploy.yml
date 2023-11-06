@@ -1,25 +1,6 @@
 name: Helm deploy
 
 on:
-  workflow_dispatch:
-    inputs:
-      release_name:
-        description: "The release name"
-        required: true
-        type: string
-      namespace:
-        description: "The namespace to use"
-        required: true
-        type: string
-      image_tag:
-        description: "The image tag to deploy"
-        required: true
-        type: string
-        default: "1.0.0"
-      environment:
-        description: "The target environment"
-        required: true
-        type: environment
   workflow_call:
     inputs:
       release_name:
