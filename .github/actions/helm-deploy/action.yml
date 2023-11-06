@@ -32,11 +32,16 @@ runs:
           need_deploy:
             - 'terraform/**'
             - 'helm/**'
+#    - id: install
+#      uses: azure/setup-helm@v3
+#      name: Install Helm
+#      with:
+#        version: v3.13.1
     - id: install
-      uses: azure/setup-helm@v3
       name: Install Helm
-      with:
-        version: v3.13.1
+      shell: bash
+      run: |
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
     - id: deploy-given-tag
       name: Deploy given tag
       if: inputs.image_tag != ''
