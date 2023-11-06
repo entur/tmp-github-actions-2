@@ -14,13 +14,13 @@ on:
         default: 'temurin'
 
 jobs:
-  watch_filter:
+  watch-filter:
     name: Check if application changes
     permissions:
       pull-requests: read
     runs-on: ubuntu-latest
     outputs:
-      found_changes: ${{ steps.filter.outputs.changes }}
+      found-changes: ${{ steps.filter.outputs.changes }}
     steps:
     - uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
@@ -37,8 +37,10 @@ jobs:
       id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
-    needs: watch_filter
-    if: needs.watch_filter.outputs.found_changes == 'true'
+    needs: watch-filter
+    if: needs.watch-filter.outputs.found-changes == 'true'
+    outputs:
+      built-app: ${{ steps.output.outputs.build != ''}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v3
@@ -69,4 +71,5 @@ jobs:
           name: ${{ github.event.pull_request.number }}-app-jar
           path: build/libs
       - name: Output build success flag
+        id: output
         run: echo "build=${{ github.event.pull_request.number }}-app-jar" >> "$GITHUB_OUTPUT"
