@@ -1,6 +1,9 @@
 name: 'Terraform setup and plan'
 description: 'Setup Terraform and creates plan'
 inputs:
+  watch:
+    description: "Watch directory for app source"
+    default: "src"
   release_name:
     description: "The release name"
     required: true
@@ -9,8 +12,6 @@ inputs:
     required: true
   image_tag:
     description: "The image tag to deploy"
-    required: true
-    default: "1.0.0"
   github_token:
     description: Github token
     required: true
@@ -20,23 +21,62 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: actions/checkout@v4
+    - uses: dorny/paths-filter@v2
+      name: Check if tag generated
+      id: filter
+      with:
+        filters: |
+          new_tag:
+            - '${{ inputs.watch }}/**'
+          need_deploy:
+            - 'terraform/**'
+            - 'helm/**'
+
     - uses: azure/setup-helm@v3
       name: Install Helm
       with:
         version: v3.13.1
         id: install
-    - name: Deploy
+    - id: deploy-given-tag
+      name: Deploy given tag
+      if: inputs.image_tag != ''
       shell: bash
       run: |
         helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
           -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
           --namespace ${{ inputs.namespace }} \
-          --set common.container.image=${{ inputs.image_tag }} \
+          --set common.container.image=eu.gcr.io/entur-system-1287/${{ inputs.release_name }}:${{ inputs.image_tags }} \
           --atomic
         kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
         kubectl -n ${{ inputs.namespace }} get services -o wide
-    - name: Set Git tag
+    - id: deploy-new-tag
+      name: Deploy new tag
+      if: inputs.image_tag == '' && steps.filter.outputs.new_tag == 'true'
+      shell: bash
+      run: |
+        helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
+          -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
+          --namespace ${{ inputs.namespace }} \
+          --set common.container.image=eu.gcr.io/entur-system-1287/${{ inputs.release_name }}:${{ github.events.pull_request.number }}-pr \
+          --atomic
+        kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
+        kubectl -n ${{ inputs.namespace }} get services -o wide
+    - id: deploy-without-tag
+      name: Deploy without tag
+      if: inputs.image_tag == '' && steps.filter.outputs.new_tag == 'false' && steps.filter.outputs.need_deploy == 'true'
+      shell: bash
+      run: |
+        helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
+          -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
+          --namespace ${{ inputs.namespace }} \
+          --atomic
+        kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
+        kubectl -n ${{ inputs.namespace }} get services -o wide
+    - id: set-git-tag
+      name: Set Git tag
       uses: weareyipyip/walking-tag-action@v2
+      if: steps.filter.outputs.new_tag == 'true'
       with:
         tag-name: current-${{ inputs.environment }}
         tag-message: The current ${{ inputs.environment }} release is based on this commit

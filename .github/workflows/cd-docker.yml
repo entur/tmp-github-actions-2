@@ -3,6 +3,9 @@ name: CD Docker
 on:
   workflow_call:
     inputs:
+      watch:
+        type: string
+        default: src
       environment:
         type: string
         default: prd
@@ -14,6 +17,22 @@ on:
         default: true
 
 jobs:
+  watch-filter:
+    name: Check if application changes
+    permissions:
+      pull-requests: read
+    runs-on: ubuntu-latest
+    outputs:
+      found-changes: ${{ steps.filter.outputs.changes }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dorny/paths-filter@v2
+      name: Check if application changes
+      id: filter
+      with:
+        filters: |
+          changes:
+            - '${{ inputs.watch }}/**'
   cd-docker:
     name: CD Docker
     permissions:
@@ -21,6 +40,7 @@ jobs:
       id-token: write
       pull-requests: write
     runs-on: ubuntu-latest
+    if: needs.watch-filter.outputs.found-changes == 'true'
     steps:
       - uses: actions/checkout@v4
       - id: auth
@@ -36,7 +56,7 @@ jobs:
           registry: eu.gcr.io
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
-      - name: Download a single artifact
+      - name: Download application build/jar
         uses: actions/download-artifact@v3
         if: inputs.download_artifact
         with:

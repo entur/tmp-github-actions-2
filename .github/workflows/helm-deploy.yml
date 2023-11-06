@@ -11,11 +11,6 @@ on:
         description: "The namespace to use"
         required: true
         type: string
-      image_tag:
-        description: "The image tag to deploy"
-        required: true
-        type: string
-        default: "1.0.0"
       environment:
         description: "The target environment"
         required: true
@@ -48,6 +43,5 @@ jobs:
         with:
           release_name: ${{ inputs.release_name }}
           namespace: ${{ inputs.namespace }}
-          image_tag: ${{ inputs.image_tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           environment: ${{ inputs.environment }}
