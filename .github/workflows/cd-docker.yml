@@ -17,6 +17,7 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
+    environment: prd
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
