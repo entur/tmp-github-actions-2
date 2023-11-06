@@ -11,7 +11,7 @@ on:
         default: true
 
 jobs:
-  ci-docker:
+  cd-docker:
     name: CD Docker
     permissions:
       contents: read
