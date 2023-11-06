@@ -68,7 +68,7 @@ runs:
         terraform init
 
     - name: Terraform Workspace
-      id: init
+      id: workspace
       working-directory: ${{ inputs.tf_directory }}
       shell: bash
       run: |
