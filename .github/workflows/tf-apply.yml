@@ -21,7 +21,7 @@ jobs:
     outputs:
       found_changes: ${{ steps.filter.outputs.terraform }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: dorny/paths-filter@v2
       name: Check if terraform changes
       id: filter

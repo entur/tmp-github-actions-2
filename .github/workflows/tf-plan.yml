@@ -40,7 +40,7 @@ jobs:
     if: github.event.review.state != 'approved' && needs.terraform_check.outputs.found_changes == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Terraform plan
         uses: entur/tmp-github-actions-2/.github/actions/tf-plan@master
         with:

@@ -22,7 +22,7 @@ jobs:
     outputs:
       found-changes: ${{ steps.filter.outputs.changes }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: dorny/paths-filter@v2
       name: Check if application changes
       id: filter
