@@ -62,24 +62,11 @@ jobs:
           project_id: ${{ secrets[format('{0}_CLUSTER_PROJECT_ID', inputs.environment)] }}
           cluster_name: ${{ secrets[format('{0}_CLUSTER_NAME', inputs.environment)] }}
           location: ${{ secrets[format('{0}_CLUSTER_LOCATION', inputs.environment)] }}
-      - uses: azure/setup-helm@v3
-        name: Install Helm
+      - name: Helm deploy
+        uses: entur/tmp-github-actions-2/.github/actions/helm-deploy@master
         with:
-          version: v3.13.1
-          id: install
-      - name: Deploy
-        run: |
-          helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
-            -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
-            --namespace ${{ inputs.namespace }} \
-            --set common.container.image=${{ inputs.image_tag }} \
-            --atomic
-          kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
-          kubectl -n ${{ inputs.namespace }} get services -o wide
-      - name: Set Git tag
-        uses: weareyipyip/walking-tag-action@v2
-        with:
-          tag-name: current-${{ inputs.environment }}
-          tag-message: The current ${{ inputs.environment }} release is based on this commit
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          release_name: ${{ inputs.release_name }}
+          namespace: ${{ inputs.namespace }}
+          image_tag: ${{ inputs.image_tag }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          environment: ${{ inputs.environment }}

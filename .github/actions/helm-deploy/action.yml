@@ -1,0 +1,44 @@
+name: 'Terraform setup and plan'
+description: 'Setup Terraform and creates plan'
+inputs:
+  release_name:
+    description: "The release name"
+    required: true
+  namespace:
+    description: "The namespace to use"
+    required: true
+  image_tag:
+    description: "The image tag to deploy"
+    required: true
+    default: "1.0.0"
+  github_token:
+    description: Github token
+    required: true
+  environment:
+    description: "The target environment"
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: azure/setup-helm@v3
+      name: Install Helm
+      with:
+        version: v3.13.1
+        id: install
+    - name: Deploy
+      shell: bash
+      run: |
+        helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
+          -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
+          --namespace ${{ inputs.namespace }} \
+          --set common.container.image=${{ inputs.image_tag }} \
+          --atomic
+        kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
+        kubectl -n ${{ inputs.namespace }} get services -o wide
+    - name: Set Git tag
+      uses: weareyipyip/walking-tag-action@v2
+      with:
+        tag-name: current-${{ inputs.environment }}
+        tag-message: The current ${{ inputs.environment }} release is based on this commit
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
