@@ -43,11 +43,6 @@ runs:
       shell: bash
       run: |
         helm list --namespace ${{ inputs.namespace }}
-#        helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
-#          -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
-#          --namespace ${{ inputs.namespace }} \
-#          --set common.container.image=eu.gcr.io/entur-system-1287/${{ inputs.release_name }}:${{ inputs.image_tag }} \
-#          --atomic
         kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
         kubectl -n ${{ inputs.namespace }} get services -o wide
     - id: deploy-new-tag
