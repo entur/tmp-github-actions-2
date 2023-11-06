@@ -15,6 +15,10 @@ on:
       java_distribution:
         type: string
         default: 'temurin'
+    outputs:
+      built-app:
+        description: "Did we build app"
+        value: ${{ jobs.ci-gradle.outputs.built-app }}
 
 jobs:
   watch-filter:
