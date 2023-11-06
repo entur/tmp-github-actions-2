@@ -22,9 +22,9 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
-    - uses: dorny/paths-filter@v2
+    - id: filter
+      uses: dorny/paths-filter@v2
       name: Check if tag generated
-      id: filter
       with:
         filters: |
           new_tag:
@@ -32,12 +32,11 @@ runs:
           need_deploy:
             - 'terraform/**'
             - 'helm/**'
-
-    - uses: azure/setup-helm@v3
+    - id: install
+      uses: azure/setup-helm@v3
       name: Install Helm
       with:
         version: v3.13.1
-        id: install
     - id: deploy-given-tag
       name: Deploy given tag
       if: inputs.image_tag != ''
