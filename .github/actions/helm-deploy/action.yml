@@ -65,8 +65,10 @@ runs:
       if: inputs.image_tag == '' && steps.filter.outputs.new_tag == 'false' && steps.filter.outputs.need_deploy == 'true'
       shell: bash
       run: |
+        img=$(kubectl get deployment -n ${{ inputs.namespace }} ${{ inputs.release_name }} -o=jsonpath='{$.spec.template.spec.containers[].image}')
         helm upgrade ${{ inputs.release_name }} helm/${{ inputs.namespace }}/ \
           -f helm/${{ inputs.release_name}}/env/values-${{ inputs.environment }}.yaml \
+          --set common.container.image="$img" \
           --namespace ${{ inputs.namespace }} \
           --atomic
         kubectl -n ${{ inputs.namespace }} rollout status deployment/${{ inputs.release_name}}
