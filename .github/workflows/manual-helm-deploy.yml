@@ -56,13 +56,13 @@ jobs:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
-              "text": "GitHub Action manual Helm deploy status: ${{ job.status }}",
+              "text": "GitHub Action manual Helm deploy status",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "This is a test"
+                    "text": "GitHub Action manual Helm deploy status: ${{ job.status }}"
                   }
                 }
               ]
