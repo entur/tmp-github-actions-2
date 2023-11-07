@@ -3,6 +3,10 @@ name: Helm deploy
 on:
   workflow_call:
     inputs:
+      image_tag:
+        description: "The image tag to deploy"
+        required: true
+        type: string
       release_name:
         description: "The release name"
         required: true
@@ -45,3 +49,4 @@ jobs:
           namespace: ${{ inputs.namespace }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           environment: ${{ inputs.environment }}
+          image_tag: ${{ inputs.image_tag }}
