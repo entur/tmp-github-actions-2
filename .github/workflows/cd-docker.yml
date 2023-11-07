@@ -110,17 +110,20 @@ jobs:
     outputs:
       image-id: ${{ steps.get-image.outputs.image-id }}
     steps:
-    # - id: auth
-    #   name: 'Authenticate to Google Cloud'
-    #   uses: 'google-github-actions/auth@v1'
-    #   with:
-    #     workload_identity_provider: ${{ inputs.provider_name }}
-    #     service_account: ${{ inputs.sa_email }}
-    # - id: get-credentials
-    #   uses: 'google-github-actions/get-gke-credentials@v1'
-    #   with:
-    #     project_id: ${{ inputs.cluster_project_id }}
-    #     cluster_name: ${{ inputs.cluster_name }}
-    #     location: ${{ inputs.cluster_location }}
+    - id: auth
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: ${{ secrets[format('{0}_PROVIDER_NAME', inputs.environment)] }}
+        service_account: ${{ secrets[format('{0}_SA_EMAIL', inputs.environment)] }}
+    - id: get-credentials
+      uses: 'google-github-actions/get-gke-credentials@v1'
+      with:
+        project_id: ${{ secrets[format('{0}_CLUSTER_PROJECT_ID', inputs.environment)] }}
+        cluster_name: ${{ secrets[format('{0}_CLUSTER_NAME', inputs.environment)] }}
+        location: ${{ secrets[format('{0}_CLUSTER_LOCATION', inputs.environment)] }}
     - id: get-image
-      run: echo "image-id=hello" >> "$GITHUB_OUTPUT"
+      run: |
+        # TODO: accept release name as well, this will not work when ns != releasename
+        image=$(kubectl get deployment -n ${{ inputs.app_name }} ${{ inputs.app_name }} -o=jsonpath='{$.spec.template.spec.containers[].image}')
+        echo "image-id=$image" >> "$GITHUB_OUTPUT"
