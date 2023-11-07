@@ -126,4 +126,4 @@ jobs:
       # TODO: accept release name as well, this will not work when ns != releasename
       run: |
         image=$(kubectl get deployment -n ${{ inputs.app_name }} ${{ inputs.app_name }} -o=jsonpath='{$.spec.template.spec.containers[].image}')
-        echo "image-id=$image" >> "$GITHUB_OUTPUT"
+        echo "image-id=${image#*:}" >> "$GITHUB_OUTPUT"
