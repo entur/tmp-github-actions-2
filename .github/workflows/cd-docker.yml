@@ -15,6 +15,9 @@ on:
       download_artifact:
         type: boolean
         default: true
+    outputs:
+      image-id:
+        value: ${{ jobs.cd-docker.outputs.image-id }}
 
 jobs:
   watch-filter:
@@ -42,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: watch-filter
     if: needs.watch-filter.outputs.found-changes == 'true'
+    outputs:
+      image-id: ${{ steps.docker-build.outputs.imageid }}
     steps:
       - uses: actions/checkout@v4
       - id: auth
@@ -51,14 +56,15 @@ jobs:
           workload_identity_provider: ${{ secrets[format('{0}_PROVIDER_NAME', inputs.environment)] }}
           service_account: ${{ secrets[format('{0}_SA_EMAIL', inputs.environment)] }}
           token_format: 'access_token'
-      - name: Login to GCR
+      - id: login-gcr
+        name: Login to GCR
         uses: docker/login-action@v3
         with:
           registry: eu.gcr.io
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
-      - name: Download artifact
-        id: download-artifact
+      - id: download-artifact
+        name: Download artifact
         if: inputs.download_artifact
         uses: dawidd6/action-download-artifact@v2.28.0
         with:
@@ -66,8 +72,8 @@ jobs:
           workflow: ci.yml
           name: ${{ github.event.pull_request.number }}-${{ inputs.app_name }}
           path: build/libs
-      - name: Docker meta
-        id: meta
+      - id: meta
+        name: Docker meta
         uses: docker/metadata-action@v5
         with:
           images: |
@@ -82,7 +88,8 @@ jobs:
             type=sha     
       - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
-      - name: Build and push
+      - id: docker-build
+        name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
