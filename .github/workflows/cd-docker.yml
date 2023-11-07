@@ -123,7 +123,7 @@ jobs:
         cluster_name: ${{ secrets[format('{0}_CLUSTER_NAME', inputs.environment)] }}
         location: ${{ secrets[format('{0}_CLUSTER_LOCATION', inputs.environment)] }}
     - id: get-image
+      # TODO: accept release name as well, this will not work when ns != releasename
       run: |
-        # TODO: accept release name as well, this will not work when ns != releasename
         image=$(kubectl get deployment -n ${{ inputs.app_name }} ${{ inputs.app_name }} -o=jsonpath='{$.spec.template.spec.containers[].image}')
         echo "image-id=$image" >> "$GITHUB_OUTPUT"
