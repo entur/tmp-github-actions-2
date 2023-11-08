@@ -57,4 +57,4 @@ jobs:
         with:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           heading: "Deploy status: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-          message: "Run details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          message: "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View details>"
