@@ -22,11 +22,10 @@ runs:
           {
           	"blocks": [
           		{
-          			"type": "header",
+          			"type": "section",
           			"text": {
-          				"type": "plain_text",
-          				"text": "${{ inputs.heading }}",
-          				"emoji": true
+          				"type": "mrkdwn",
+          				"text": "${{ inputs.header }}"
           			}
           		},
           		{
