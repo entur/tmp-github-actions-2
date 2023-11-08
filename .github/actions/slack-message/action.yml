@@ -25,7 +25,7 @@ runs:
           			"type": "section",
           			"text": {
           				"type": "mrkdwn",
-          				"text": "${{ inputs.header }}"
+          				"text": "${{ inputs.heading }}"
           			}
           		},
           		{
