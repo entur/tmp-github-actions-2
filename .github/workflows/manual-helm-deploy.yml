@@ -50,20 +50,34 @@ jobs:
           image_tag: ${{ inputs.image_tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           environment: ${{ inputs.environment }}
-      - name: Send status to Slack
+      - name: Notify Slack
+        id: slack
+        if: always()
         uses: entur/tmp-github-actions-2/.github/actions/slack-message@master
         with:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
             {
-              "text": "GitHub Action manual Helm deploy status",
+              "text": "Manual Helm deploy status: ${{ job.status }}",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
                     "text": "GitHub Action manual Helm deploy status: ${{ job.status }}"
-                  }
+                  },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":github: Action details"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    },
+
                 }
               ]
             }
