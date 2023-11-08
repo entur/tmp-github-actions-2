@@ -65,7 +65,8 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "GitHub Action manual Helm deploy status: ${{ job.status }}"
-                  },
+                  }
+                },
                 {
                   "type": "actions",
                   "elements": [
@@ -76,8 +77,8 @@ jobs:
                         "text": ":github: Action details"
                       },
                       "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    },
-
+                    }
+                  ]
                 }
               ]
             }
