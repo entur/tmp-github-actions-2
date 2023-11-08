@@ -56,22 +56,5 @@ jobs:
         uses: entur/tmp-github-actions-2/.github/actions/slack-message@master
         with:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          payload: |
-            {
-              "text": "Manual Helm deploy status: ${{ job.status }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "GitHub Action manual Helm deploy status: ${{ job.status }}"
-                  }
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                  }
-                }
-              ]
-            }
+          heading: "Deploy status: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+          message: "Run details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

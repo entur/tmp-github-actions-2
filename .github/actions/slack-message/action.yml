@@ -20,24 +20,16 @@ runs:
       with:
         payload: |
           {
-	          "blocks": [
-		          {
-			          "type": "header",
-			          "text": {
-				          "type": "plain_text",
-				          "text": "$ {{ inputs.heading }}",
-				          "emoji": true
-			          }
-		          },
-		          {
-			          "type": "section",
-			          "text": {
-				          "type": "mrkdwn",
-				          "text": "$ {{ inputs.message }}"
-			          },
-			          "block_id": "text2"
-		          }
-	          ]
+            "text": " ${{ inputs.heading }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "$ {{ inputs.message }}"
+                }
+              }
+            ]
           }
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
