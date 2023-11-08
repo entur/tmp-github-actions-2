@@ -65,8 +65,8 @@ jobs:
                   "text": {
                     "type": "mrkdwn",
                     "text": "GitHub Action manual Helm deploy status: ${{ job.status }}"
-                  },
-                  {
+                  }
+                {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",

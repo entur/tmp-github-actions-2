@@ -4,8 +4,11 @@ inputs:
   slack_webhook_url:
     description: "Slack webhook URL"
     required: true
-  payload:
-    description: 'Message to send'
+  heading:
+    description: "Message heading"
+    required: true
+  message:
+    description: "Message text"
     required: true
 
 runs:
@@ -16,7 +19,26 @@ runs:
       uses: slackapi/slack-github-action@v1.24.0
       with:
         payload: |
-          ${{ inputs.payload }}
+          {
+	          "blocks": [
+		          {
+			          "type": "header",
+			          "text": {
+				          "type": "plain_text",
+				          "text": "$ {{ inputs.heading }}",
+				          "emoji": true
+			          }
+		          },
+		          {
+			          "type": "section",
+			          "text": {
+				          "type": "mrkdwn",
+				          "text": "$ {{ inputs.message }}"
+			          },
+			          "block_id": "text2"
+		          }
+	          ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
