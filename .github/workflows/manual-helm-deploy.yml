@@ -56,5 +56,5 @@ jobs:
         uses: entur/tmp-github-actions-2/.github/actions/slack-message@master
         with:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          heading: "Deploy status: ${{ job.status }}. ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+          heading: "Status manual deploy to ${{ inputs.environment }}: ${{ job.status }}"
           message: "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View details>"
