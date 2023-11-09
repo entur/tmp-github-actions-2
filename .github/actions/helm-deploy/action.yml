@@ -24,7 +24,7 @@ runs:
   steps:
     - id: filter
       uses: dorny/paths-filter@v2
-      name: Check if tag generated
+      name: Check for tag generated
       with:
         filters: |
           new_tag:

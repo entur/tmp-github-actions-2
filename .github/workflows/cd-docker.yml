@@ -21,7 +21,7 @@ on:
 
 jobs:
   watch-filter:
-    name: Check if application changes
+    name: Check for application changes
     permissions:
       pull-requests: read
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: dorny/paths-filter@v2
-      name: Check if application changes
+      name: Check for application changes
       id: filter
       with:
         filters: |
@@ -85,7 +85,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-            type=sha     
+            type=sha
       - name: Set up Docker build
         uses: docker/setup-buildx-action@v3
       - id: docker-build
@@ -97,7 +97,7 @@ jobs:
           # push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  
+
   cd-redeploy:
     name: CD redeploy
     permissions:

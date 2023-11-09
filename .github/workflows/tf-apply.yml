@@ -14,7 +14,7 @@ on:
 
 jobs:
   terraform-check:
-    name: Check if terraform changes
+    name: Check for terraform changes
     permissions:
       pull-requests: read
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: dorny/paths-filter@v2
-      name: Check if terraform changes
+      name: Check for terraform changes
       id: filter
       with:
         filters: |
