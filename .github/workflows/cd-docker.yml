@@ -80,6 +80,7 @@ jobs:
             eu.gcr.io/entur-system-1287/${{ inputs.app_name }}
           tags: |
             type=schedule
+            type=raw,value=pr-${{ github.event.pull_request.number }}
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
