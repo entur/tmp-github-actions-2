@@ -37,7 +37,8 @@ jobs:
       id-token: write
       pull-requests: write
     needs: terraform-check
-    if: github.event.pull_request.merged == true && needs.terraform-check.outputs.found_changes == 'true'
+    # if: github.event.pull_request.merged == true && needs.terraform-check.outputs.found_changes == 'true'
+    if: needs.terraform-check.outputs.found_changes == 'true'
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
